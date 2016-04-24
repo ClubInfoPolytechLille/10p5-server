@@ -46,6 +46,7 @@ function verifierJeton($jeton) {
     if (!$requete->execute()) {
         retour("erreur_bdd", ["message" => $requete->error]);
     }
+    // On écrit dans les variables globales $login & $droit
     $requete->bind_result($login, $droit, $date);
     if ($requete->fetch()) {
         if (time() > $date + JETON_DUREE) {
