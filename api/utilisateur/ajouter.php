@@ -20,7 +20,14 @@ if (!$requete->execute()) {
 }
 $requete->close();
 
-// TODO loginLille1 && idCarte
+if (donne("idCarte")) {
+    $requete = $db->prepare("UPDATE Utilisateurs SET idCarte=? WHERE login=?");
+    $requete->bind_param("ss", $_POST["idCarte"], $_POST["login"]);
+    if (!$requete->execute()) {
+        retour("erreur_bdd", ["message" => $requete->error]);
+    }
+    $requete->close();
+}
 
 retour("ok");
 

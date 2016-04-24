@@ -31,10 +31,20 @@ if (donne("login") && donne("mdp")) {
         retour("identifiants_invalides"); // Identifiant inconnu
     }
     $requete->close();
+
 } else if (donne("idCarte")) {
-    // Si l'utilisateur s'authentifie par carte
-    // $login = ...
-    retour("non_implemente"); // TODO
+    $requete = $db->prepare("SELECT login FROM Utilisateurs WHERE idCarte = ?");
+    $idCarte = donne("idCarte");
+    $requete->bind_param("s", $idCarte);
+    if (!$requete->execute()) {
+        retour("erreur_bdd", ["message" => $requete->error]);
+    }
+    $requete->bind_result($login);
+    if (!$requete->fetch()) {
+        retour("carte_inconnue");
+    }
+    $requete->close();
+
 } else {
     retour("requete_malformee");
 }

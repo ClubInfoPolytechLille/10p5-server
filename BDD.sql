@@ -1,5 +1,5 @@
 CREATE TABLE Utilisateurs (
-	loginLille1 char(30),
+	-- loginLille1 char(30),
 	idCarte char(8),
 	login char(30) PRIMARY KEY,
 	mdp char(255),
@@ -13,7 +13,7 @@ CREATE TABLE Sessions (
 );
 
 CREATE TABLE Clients (
-	loginLille1 char(30) PRIMARY KEY,
+	-- loginLille1 char(30) PRIMARY KEY,
 	solde float(7,2),
 	idCarte char(8),
 	credit boolean
