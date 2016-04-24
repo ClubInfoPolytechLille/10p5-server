@@ -30,13 +30,24 @@ function donne($parametre) { // Vérifie si le paramètre est donné
     }
 }
 
-function verifierJeton($jeton) {
-    global $db, $login, $droit;
-    $requete = $db->prepare("SELECT Utilisateurs.login, Utilisateurs.droit FROM Utilisateurs JOIN Sessions ON Utilisateurs.login=Sessions.utilisateur WHERE Sessions.jeton=?");
+function supprimerJeton($jeton) {
+    $requete = $db->prepare("DELETE FROM Sessions WHERE jeton=?");
     $requete->bind_param("s", $jeton);
     $requete->execute();
-    $requete->bind_result($login, $droit);
-    if (!$requete->fetch()) {
+    $requete->close();
+}
+
+function verifierJeton($jeton) {
+    global $db, $login, $droit;
+    $requete = $db->prepare("SELECT Utilisateurs.login, Utilisateurs.droit, UNIX_TIMESTAMP(Sessions.date) FROM Utilisateurs JOIN Sessions ON Utilisateurs.login=Sessions.utilisateur WHERE Sessions.jeton=?");
+    $requete->bind_param("s", $jeton);
+    $requete->execute();
+    $requete->bind_result($login, $droit, $date);
+    if ($requete->fetch()) {
+        if (time() > $date + JETON_DUREE) {
+            retour("jeton_expire");
+        }
+    } else {
         retour("jeton_invalide");
     }
     $requete->close();

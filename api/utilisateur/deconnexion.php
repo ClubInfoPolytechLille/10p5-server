@@ -11,12 +11,7 @@ if (!donne("jeton")) {
 
 verifierJeton(donne("jeton"));
 
-$jeton = donne("jeton");
-
-$requete = $db->prepare("DELETE FROM Sessions WHERE jeton=?");
-$requete->bind_param("s", $jeton);
-$requete->execute();
-$requete->close();
+supprimerJeton(donne("jeton"));
 
 retour("ok");
 
