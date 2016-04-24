@@ -30,7 +30,22 @@ function donne($parametre) { // Vérifie si le paramètre est donné
     }
 }
 
-mysqli_report(MYSQLI_REPORT_ALL);
+function verifierJeton($jeton) {
+    global $db, $login, $droit;
+    $requete = $db->prepare("SELECT Utilisateurs.login, Utilisateurs.droit FROM Utilisateurs JOIN Sessions ON Utilisateurs.login=Sessions.utilisateur WHERE Sessions.jeton=?");
+    $requete->bind_param("s", $jeton);
+    $requete->execute();
+    $requete->bind_result($login, $droit);
+    if (!$requete->fetch()) {
+        retour("jeton_invalide");
+    }
+    $requete->close();
+}
+
+// Variables globales
+
+$login = "";
+$droit = 0;
 
 // Connexion à la base de donnée
 $db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -43,6 +58,7 @@ if ($db->connect_error) {
 if (!defined("CRYPT_BLOWFISH") || !CRYPT_BLOWFISH) {
     retour("manque_bcrypt");
 }
+
 
 
 ?>

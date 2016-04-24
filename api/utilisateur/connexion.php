@@ -1,6 +1,6 @@
 <?php
 
-require_once("commun.php");
+require_once("../commun.php");
 
 function random_str($length, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') {
     // Depuis http://stackoverflow.com/a/31107425/2766106
