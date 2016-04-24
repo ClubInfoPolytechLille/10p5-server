@@ -6,6 +6,12 @@ CREATE TABLE Utilisateurs (
 	droit integer DEFAULT '0'
 );
 
+CREATE TABLE Sessions (
+	jeton char(30) PRIMARY KEY,
+	utilisateur char(30) REFERENCES Utilisateurs(login)Temps de validité du jeton en secondes,
+	date datetime DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE Clients (
 	loginLille1 char(30) PRIMARY KEY,
 	solde float(7,2),
@@ -23,7 +29,7 @@ CREATE TABLE Prix (
 CREATE TABLE Transactions (
 	id serial PRIMARY KEY,
 	type char(15),
-	date datetime,
+	date datetime DEFAULT CURRENT_TIMESTAMP,
 	montant float(7,2),
 	quantite integer(2),
 	utilisateur char(30) REFERENCES Utilisateur(login),
