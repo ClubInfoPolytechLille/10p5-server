@@ -92,6 +92,17 @@ function clientExiste($idCarte) {
     $requete->close();
 }
 
+function transaction($type, $client, $montant = 0, $quantite = 0) {
+    global $db, $login;
+    $requete = $db->prepare("INSERT INTO Transactions (type, client, montant, quantite, utilisateur) VALUES (?, ?, ?, ?, ?)");
+    $requete->bind_param("sssss", $type, $client, $montant, $quantite, $login);
+    if (!$requete->execute()) {
+        retour("erreur_bdd", ["message" => $requete->error]);
+    }
+    $requete->close();
+    return $db->insert_id;
+}
+
 // Variables globales
 
 $login = "";

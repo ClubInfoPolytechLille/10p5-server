@@ -27,10 +27,10 @@ CREATE TABLE Prix (
 CREATE TABLE Transactions (
 	id serial PRIMARY KEY,
 	type char(15),
+	client char(8) REFERENCES Client(idCarte),
 	date datetime DEFAULT CURRENT_TIMESTAMP,
 	montant float(7,2),
 	quantite integer(2),
 	utilisateur char(30) REFERENCES Utilisateur(login),
-	client char(30) REFERENCES Client(loginLille1),
-	valide boolean
+	valide boolean DEFAULT true
 );
