@@ -19,7 +19,9 @@ if (donne("login") && donne("mdp")) {
     $login = donne("login");
     $requete = $db->prepare("SELECT mdp FROM Utilisateurs WHERE login = ?");
     $requete->bind_param("s", $login);
-    $requete->execute();
+    if (!$requete->execute()) {
+        retour("erreur_bdd", ["message" => $requete->error]);
+    }
     $requete->bind_result($mdpHash);
     if ($requete->fetch()) {
         if (!password_verify(donne("mdp"), $mdpHash)) {
@@ -42,14 +44,18 @@ $jeton = random_str(JETON_TAILLE);
 
 $requete = $db->prepare("INSERT INTO Sessions (jeton, utilisateur) VALUES (?, ?)");
 $requete->bind_param("ss", $jeton, $login);
-$requete->execute();
+if (!$requete->execute()) {
+    retour("erreur_bdd", ["message" => $requete->error]);
+}
 $requete->close();
 
 // Récupération des données de l'utilisateur
 
 $requete = $db->prepare("SELECT droit FROM Utilisateurs WHERE login = ?");
 $requete->bind_param("s", $login);
-$requete->execute();
+if (!$requete->execute()) {
+    retour("erreur_bdd", ["message" => $requete->error]);
+}
 $requete->bind_result($droit);
 $requete->fetch();
 $requete->close();

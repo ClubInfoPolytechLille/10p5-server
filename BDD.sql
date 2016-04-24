@@ -2,7 +2,7 @@ CREATE TABLE Utilisateurs (
 	loginLille1 char(30),
 	idCarte char(8),
 	login char(30) PRIMARY KEY,
-	mdp char(60),
+	mdp char(255),
 	droit integer DEFAULT '0'
 );
 

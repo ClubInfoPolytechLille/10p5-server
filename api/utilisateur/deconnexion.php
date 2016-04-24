@@ -2,14 +2,7 @@
 
 require_once("../commun.php");
 
-
-// Vérification des paramètres
-
-if (!donne("jeton")) {
-    retour("requete_malformee");
-}
-
-verifierJeton(donne("jeton"));
+verifierDroit(0);
 
 supprimerJeton(donne("jeton"));
 

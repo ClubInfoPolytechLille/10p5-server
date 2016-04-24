@@ -33,7 +33,9 @@ function donne($parametre) { // Vérifie si le paramètre est donné
 function supprimerJeton($jeton) {
     $requete = $db->prepare("DELETE FROM Sessions WHERE jeton=?");
     $requete->bind_param("s", $jeton);
-    $requete->execute();
+    if (!$requete->execute()) {
+        retour("erreur_bdd", ["message" => $requete->error]);
+    }
     $requete->close();
 }
 
@@ -41,7 +43,9 @@ function verifierJeton($jeton) {
     global $db, $login, $droit;
     $requete = $db->prepare("SELECT Utilisateurs.login, Utilisateurs.droit, UNIX_TIMESTAMP(Sessions.date) FROM Utilisateurs JOIN Sessions ON Utilisateurs.login=Sessions.utilisateur WHERE Sessions.jeton=?");
     $requete->bind_param("s", $jeton);
-    $requete->execute();
+    if (!$requete->execute()) {
+        retour("erreur_bdd", ["message" => $requete->error]);
+    }
     $requete->bind_result($login, $droit, $date);
     if ($requete->fetch()) {
         if (time() > $date + JETON_DUREE) {
@@ -50,6 +54,29 @@ function verifierJeton($jeton) {
     } else {
         retour("jeton_invalide");
     }
+    $requete->close();
+}
+
+function verifierDroit($droitMinimum) {
+    global $droit;
+    if (donne("jeton")) {
+        verifierJeton(donne("jeton"));
+        if ($droit < $droitMinimum) {
+            retour("droits_insuffisants");
+        }
+    } else {
+        retour("jeton_vide");
+    }
+}
+
+function utilisateurExiste($login) {
+    global $db;
+    $requete = $db->prepare("SELECT login FROM Utilisateurs WHERE login=?");
+    $requete->bind_param("s", $login);
+    if (!$requete->execute()) {
+        retour("erreur_bdd", ["message" => $requete->error]);
+    }
+    return $requete->fetch();
     $requete->close();
 }
 
@@ -64,12 +91,6 @@ $db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 if ($db->connect_error) {
     retour("erreur_bdd", ["message" => $db->connect_error]);
 }
-
-// Vérification de la présence de bcrypt
-if (!defined("CRYPT_BLOWFISH") || !CRYPT_BLOWFISH) {
-    retour("manque_bcrypt");
-}
-
 
 
 ?>
