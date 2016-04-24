@@ -81,6 +81,17 @@ function utilisateurExiste($login) {
     $requete->close();
 }
 
+function clientExiste($idCarte) {
+    global $db;
+    $requete = $db->prepare("SELECT idCarte FROM Clients WHERE idCarte=?");
+    $requete->bind_param("s", $idCarte);
+    if (!$requete->execute()) {
+        retour("erreur_bdd", ["message" => $requete->error]);
+    }
+    return $requete->fetch();
+    $requete->close();
+}
+
 // Variables globales
 
 $login = "";

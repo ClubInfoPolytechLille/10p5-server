@@ -1,0 +1,39 @@
+<?php
+
+require_once("../commun.php");
+
+verifierDroit(1);
+
+if (!(donne("idCarte") && donne("solde"))) {
+    retour("requete_malformee");
+}
+
+if (clientExiste(donne("idCarte"))) {
+    retour("client_existant");
+}
+
+if (donne("decouvert") && $_POST["decouvert"] != "false" && $_POST["decouvert"] != "0") {
+    verifierDroit(3);
+    $decouvert = true;
+} else {
+    $decouvert = false;
+}
+
+$solde = floatval($_POST["solde"]);
+
+if ($solde < 0 && !$decouvert) {
+    retour("solde_negatif");
+}
+
+
+$requete = $db->prepare("INSERT INTO Clients (idCarte, solde, decouvert) VALUES (?, ?, ?)");
+$requete->bind_param("sss", $_POST["idCarte"], $_POST["solde"], $decouvert);
+if (!$requete->execute()) {
+    retour("erreur_bdd", ["message" => $requete->error]);
+}
+$requete->close();
+
+
+retour("ok");
+
+?>

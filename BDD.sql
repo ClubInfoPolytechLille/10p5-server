@@ -1,22 +1,20 @@
 CREATE TABLE Utilisateurs (
-	-- loginLille1 char(30),
-	idCarte char(8),
 	login char(30) PRIMARY KEY,
 	mdp char(255),
+	idCarte char(8),
 	droit integer DEFAULT '0'
 );
 
 CREATE TABLE Sessions (
 	jeton char(30) PRIMARY KEY,
-	utilisateur char(30) REFERENCES Utilisateurs(login)Temps de validité du jeton en secondes,
+	utilisateur char(30) REFERENCES Utilisateurs(login)
 	date datetime DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Clients (
-	-- loginLille1 char(30) PRIMARY KEY,
+	idCarte char(8) PRIMARY KEY,
 	solde float(7,2),
-	idCarte char(8),
-	credit boolean
+	decouvert boolean DEFAULT false
 );
 
 
