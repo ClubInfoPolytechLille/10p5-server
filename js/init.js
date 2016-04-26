@@ -1,6 +1,7 @@
 $(function(){
     $('.button-collapse').sideNav();
     $('.modal-trigger').leanModal()
+    Materialize.toast("Connecté en tant que vigou", 4000);
 }); // end of document ready
 
 function vendu() {
