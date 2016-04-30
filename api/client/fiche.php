@@ -57,13 +57,8 @@ if ($droit < 2) {
     exit();
 }
 
-function loginLille1Valide($login) {
-    // Vérifie si le login est correct
-    return true; // :p
-}
-
-if (isset($_POST['loginLille1']) && loginLille1Valide($_POST['loginLille1'])) {
-    $loginLille1 = $_POST['loginLille1'];
+if (isset($_POST['idCarte'])) {
+    $idCarte = $_POST['idCarte'];
 } else {
 ?>
 {
@@ -74,10 +69,10 @@ if (isset($_POST['loginLille1']) && loginLille1Valide($_POST['loginLille1'])) {
 }
 
 // On checke si le loginLille1 est connu dans la base de données
-if ($loginLille1 != 'petite.jaja') {
+if ($idCarte != 'AHS0DIEX') {
 ?>
 {
-	"status": "etudiant_inconnu"
+	"status": "client_inconnu"
 }
 <?php
     exit();
@@ -86,8 +81,7 @@ if ($loginLille1 != 'petite.jaja') {
 ?>
 {
 	"status": "ok",
-	"loginLille1": "petite.jaja",
-	"idCarteEtudiant": "AHS0DIEX",
+	"idCarte": "AHS0DIEX",
 	"solde": 48.3,
 <?php
 if ($droit >= 3) {
