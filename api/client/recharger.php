@@ -14,9 +14,13 @@ if (!clientExiste(donne("idCarte"))) {
 
 $montant = floatval($_POST["montant"]);
 
+if ($montant <= 0) {
+    retour("rechargement_negatif");
+}
+
 $requete = $db->prepare("SELECT solde FROM Clients WHERE idCarte=?");
 $requete->bind_param("s", $_POST["idCarte"]);
-$requete->bind_results($soldeAncien);
+$requete->bind_result($soldeAncien);
 if (!$requete->execute()) {
     retour("erreur_bdd", ["message" => $requete->error]);
 }
@@ -34,6 +38,6 @@ $requete->close();
 $id = transaction(TRANSACTION_RECHARGEMENT, $_POST["idCarte"], $montant);
 
 
-retour("ok", ["id" => $id, "montantAncien" => $montantAncien, "montantNouveau" => $montantNouveau]);
+retour("ok", ["id" => $id, "soldeAncien" => $soldeAncien, "soldeNouveau" => $soldeNouveau]);
 
 ?>
