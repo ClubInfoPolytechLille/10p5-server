@@ -16,6 +16,8 @@ define("TRANSACTION_RECHARGEMENT", 2);
 define("TRANSACTION_PAIEMENT", 3);
 define("TRANSACTION_VIDANGE", 4);
 
+define("TRANSACTION_DUREE", 60);
+
 // Fonctions utiles
 function retour($status, $donnees = array()) { // Renvoie les données passées
     $donnees['status'] = $status;
@@ -63,12 +65,12 @@ function verifierJeton($jeton) {
     $requete->close();
 }
 
-function verifierDroit($droitMinimum) {
+function verifierDroit($droitMinimum, $retour = "droits_insuffisants") {
     global $droit;
     if (donne("jeton")) {
         verifierJeton(donne("jeton"));
         if ($droit < $droitMinimum) {
-            retour("droits_insuffisants");
+            retour($retour);
         }
     } else {
         retour("jeton_vide");
