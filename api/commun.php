@@ -11,6 +11,11 @@ header('Content-type: application/json'); // Histoire de faire comprendre au cli
 define("JETON_TAILLE", 30); // Taille d'un jeton
 define("JETON_DUREE", 10*60); // Temps de validité du jeton en secondes
 
+define("TRANSACTION_CREATION", 1);
+define("TRANSACTION_RECHARGEMENT", 2);
+define("TRANSACTION_PAIEMENT", 3);
+define("TRANSACTION_VIDANGE", 4);
+
 // Fonctions utiles
 function retour($status, $donnees = array()) { // Renvoie les données passées
     $donnees['status'] = $status;
