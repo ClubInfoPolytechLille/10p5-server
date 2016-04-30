@@ -32,9 +32,9 @@ if (!$requete->execute()) {
     retour("erreur_bdd", ["message" => $requete->error]);
 }
 $requete->close();
-$id = transaction(TRANSACTION_CREATION, $_POST["idCarte"], $solde);
+$idTransaction = transaction(TRANSACTION_CREATION, $_POST["idCarte"], $solde);
 
 
-retour("ok", ["id" => $id]);
+retour("ok", ["idTransaction" => $idTransaction]);
 
 ?>
