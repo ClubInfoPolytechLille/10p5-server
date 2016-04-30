@@ -14,9 +14,9 @@ if (clientExiste(donne("idCarte"))) {
 
 if (donne("decouvert") && $_POST["decouvert"] != "false" && $_POST["decouvert"] != "0") {
     verifierDroit(3);
-    $decouvert = true;
+    $decouvert = 1;
 } else {
-    $decouvert = false;
+    $decouvert = 0;
 }
 
 $solde = floatval($_POST["solde"]);
