@@ -25,6 +25,7 @@ if (donne("quantite")) {
     $montant = $prixItem * $quantite;
 } else {
     $montant = floatval($_POST["montant"]);
+    $quantite = 0;
 }
 
 if ($montant <= 0) {
@@ -52,7 +53,7 @@ if (!$requete->execute()) {
     retour("erreur_bdd", ["message" => $requete->error]);
 }
 $requete->close();
-$id = transaction(TRANSACTION_PAIEMENT, $_POST["idCarte"], $montant);
+$id = transaction(TRANSACTION_PAIEMENT, $_POST["idCarte"], $montant, $quantite);
 
 
 retour("ok", ["id" => $id, "soldeAncien" => $soldeAncien, "soldeNouveau" => $soldeNouveau]);
