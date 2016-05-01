@@ -27,6 +27,9 @@ if ($solde < 0 && !$decouvert) {
 
 
 $requete = $db->prepare("INSERT INTO Clients (idCarte, solde, decouvert) VALUES (?, ?, ?)");
+if (!$requete) {
+    retour("erreur_bdd_preparee", ["message" => $db->error]);
+}
 $requete->bind_param("sss", $_POST["idCarte"], $solde, $decouvert);
 if (!$requete->execute()) {
     retour("erreur_bdd", ["message" => $requete->error]);

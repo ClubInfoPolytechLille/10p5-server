@@ -10,6 +10,9 @@ if (!donne("idCarte")) {
 
 // Informations sur l'utilisateur
 $requete = $db->prepare("SELECT decouvert, solde FROM Clients WHERE idCarte=?");
+if (!$requete) {
+    retour("erreur_bdd_preparee", ["message" => $db->error]);
+}
 $requete->bind_param("s", $_POST["idCarte"]);
 if (!$requete->execute()) {
     retour("erreur_bdd", ["message" => $requete->error]);
@@ -22,6 +25,9 @@ $requete->close();
 
 // Transactions de l'utilisateur
 $requete = $db->prepare("SELECT id, type, UNIX_TIMESTAMP(date), montant, quantite, utilisateur, valide FROM Transactions WHERE client=?");
+if (!$requete) {
+    retour("erreur_bdd_preparee", ["message" => $db->error]);
+}
 $requete->bind_param("s", $_POST["idCarte"]);
 if (!$requete->execute()) {
     retour("erreur_bdd", ["message" => $requete->error]);

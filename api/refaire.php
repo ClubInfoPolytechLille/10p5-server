@@ -9,6 +9,9 @@ if (!donne("idTransaction")) {
 }
 
 $requete = $db->prepare("SELECT type, client, UNIX_TIMESTAMP(date), montant, utilisateur, valide FROM Transactions WHERE id=?");
+if (!$requete) {
+    retour("erreur_bdd_preparee", ["message" => $db->error]);
+}
 $requete->bind_param("s", $_POST['idTransaction']);
 if (!$requete->execute()) {
     retour("erreur_bdd", ["message" => $requete->error]);
@@ -32,6 +35,9 @@ if (time() > $date + TRANSACTION_DUREE) {
 }
 
 $requete = $db->prepare("SELECT solde FROM Clients WHERE idCarte=?");
+if (!$requete) {
+    retour("erreur_bdd_preparee", ["message" => $db->error]);
+}
 $requete->bind_param("s", $client);
 $requete->bind_result($soldeAncien);
 if (!$requete->execute()) {
@@ -57,6 +63,9 @@ default:
 }
 
 $requete = $db->prepare("UPDATE Clients SET solde=? WHERE idCarte=?");
+if (!$requete) {
+    retour("erreur_bdd_preparee", ["message" => $db->error]);
+}
 $requete->bind_param("ss", $soldeNouveau, $client);
 if (!$requete->execute()) {
     retour("erreur_bdd", ["message" => $requete->error]);
@@ -65,6 +74,9 @@ $requete->close();
 
 
 $requete = $db->prepare("UPDATE Transactions SET valide=1 WHERE id=?");
+if (!$requete) {
+    retour("erreur_bdd_preparee", ["message" => $db->error]);
+}
 $requete->bind_param("s", $_POST["idTransaction"]);
 if (!$requete->execute()) {
     retour("erreur_bdd", ["message" => $requete->error]);

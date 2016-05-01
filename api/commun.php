@@ -39,6 +39,9 @@ function donne($parametre) { // Vérifie si le paramètre est donné
 
 function supprimerJeton($jeton) {
     $requete = $db->prepare("DELETE FROM Sessions WHERE jeton=?");
+    if (!$requete) {
+        retour("erreur_bdd_preparee", ["message" => $db->error]);
+    }
     $requete->bind_param("s", $jeton);
     if (!$requete->execute()) {
         retour("erreur_bdd", ["message" => $requete->error]);
@@ -49,6 +52,9 @@ function supprimerJeton($jeton) {
 function verifierJeton($jeton) {
     global $db, $login, $droit;
     $requete = $db->prepare("SELECT Utilisateurs.login, Utilisateurs.droit, UNIX_TIMESTAMP(Sessions.date) FROM Utilisateurs JOIN Sessions ON Utilisateurs.login=Sessions.utilisateur WHERE Sessions.jeton=?");
+    if (!$requete) {
+        retour("erreur_bdd_preparee", ["message" => $db->error]);
+    }
     $requete->bind_param("s", $jeton);
     if (!$requete->execute()) {
         retour("erreur_bdd", ["message" => $requete->error]);
@@ -80,6 +86,9 @@ function verifierDroit($droitMinimum, $retour = "droits_insuffisants") {
 function utilisateurExiste($login) {
     global $db;
     $requete = $db->prepare("SELECT login FROM Utilisateurs WHERE login=?");
+    if (!$requete) {
+        retour("erreur_bdd_preparee", ["message" => $db->error]);
+    }
     $requete->bind_param("s", $login);
     if (!$requete->execute()) {
         retour("erreur_bdd", ["message" => $requete->error]);
@@ -91,6 +100,9 @@ function utilisateurExiste($login) {
 function clientExiste($idCarte) {
     global $db;
     $requete = $db->prepare("SELECT idCarte FROM Clients WHERE idCarte=?");
+    if (!$requete) {
+        retour("erreur_bdd_preparee", ["message" => $db->error]);
+    }
     $requete->bind_param("s", $idCarte);
     if (!$requete->execute()) {
         retour("erreur_bdd", ["message" => $requete->error]);
@@ -102,6 +114,9 @@ function clientExiste($idCarte) {
 function transaction($type, $client, $montant = 0, $quantite = 0) {
     global $db, $login;
     $requete = $db->prepare("INSERT INTO Transactions (type, client, montant, quantite, utilisateur) VALUES (?, ?, ?, ?, ?)");
+    if (!$requete) {
+        retour("erreur_bdd_preparee", ["message" => $db->error]);
+    }
     $requete->bind_param("sssss", $type, $client, $montant, $quantite, $login);
     if (!$requete->execute()) {
         retour("erreur_bdd", ["message" => $requete->error]);

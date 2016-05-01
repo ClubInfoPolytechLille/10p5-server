@@ -15,6 +15,9 @@ if (!clientExiste(donne("idCarte"))) {
 if (donne("quantite")) {
     $quantite = intval($_POST["quantite"]);
     $requete = $db->prepare("SELECT prix FROM Prix");
+    if (!$requete) {
+        retour("erreur_bdd_preparee", ["message" => $db->error]);
+    }
     $requete->bind_result($prixItem);
     if (!$requete->execute()) {
         retour("erreur_bdd", ["message" => $requete->error]);
@@ -33,6 +36,9 @@ if ($montant <= 0) {
 }
 
 $requete = $db->prepare("SELECT solde, decouvert FROM Clients WHERE idCarte=?");
+if (!$requete) {
+    retour("erreur_bdd_preparee", ["message" => $db->error]);
+}
 $requete->bind_param("s", $_POST["idCarte"]);
 $requete->bind_result($soldeAncien, $decouvert);
 if (!$requete->execute()) {
@@ -48,6 +54,9 @@ if ($soldeNouveau < 0 && !$decouvert) {
 }
 
 $requete = $db->prepare("UPDATE Clients SET solde=? WHERE idCarte=?");
+if (!$requete) {
+    retour("erreur_bdd_preparee", ["message" => $db->error]);
+}
 $requete->bind_param("ss", $soldeNouveau, $_POST["idCarte"]);
 if (!$requete->execute()) {
     retour("erreur_bdd", ["message" => $requete->error]);

@@ -5,6 +5,9 @@ require_once("../commun.php");
 verifierDroit(2);
 
 $requete = $db->prepare("SELECT idCarte, solde, decouvert FROM Clients");
+if (!$requete) {
+    retour("erreur_bdd_preparee", ["message" => $db->error]);
+}
 if (!$requete->execute()) {
     retour("erreur_bdd", ["message" => $requete->error]);
 }

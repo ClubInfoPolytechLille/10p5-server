@@ -19,6 +19,9 @@ if ($login != donne("login")) {
 }
 
 $requete = $db->prepare("UPDATE Utilisateurs SET idCarte=? WHERE login=?");
+if (!$requete) {
+    retour("erreur_bdd_preparee", ["message" => $db->error]);
+}
 $requete->bind_param("ss", $_POST["idCarte"], $_POST["login"]);
 if (!$requete->execute()) {
     retour("erreur_bdd", ["message" => $requete->error]);

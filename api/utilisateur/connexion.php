@@ -18,6 +18,9 @@ if (donne("login") && donne("mdp")) {
     // Si l'utilisateur s'authentifie par login + mdp
     $login = donne("login");
     $requete = $db->prepare("SELECT mdp FROM Utilisateurs WHERE login = ?");
+    if (!$requete) {
+        retour("erreur_bdd_preparee", ["message" => $db->error]);
+    }
     $requete->bind_param("s", $login);
     if (!$requete->execute()) {
         retour("erreur_bdd", ["message" => $requete->error]);
@@ -34,6 +37,9 @@ if (donne("login") && donne("mdp")) {
 
 } else if (donne("idCarte")) {
     $requete = $db->prepare("SELECT login FROM Utilisateurs WHERE idCarte = ?");
+    if (!$requete) {
+        retour("erreur_bdd_preparee", ["message" => $db->error]);
+    }
     $idCarte = donne("idCarte");
     $requete->bind_param("s", $idCarte);
     if (!$requete->execute()) {
@@ -53,6 +59,9 @@ if (donne("login") && donne("mdp")) {
 $jeton = random_str(JETON_TAILLE);
 
 $requete = $db->prepare("INSERT INTO Sessions (jeton, utilisateur) VALUES (?, ?)");
+if (!$requete) {
+    retour("erreur_bdd_preparee", ["message" => $db->error]);
+}
 $requete->bind_param("ss", $jeton, $login);
 if (!$requete->execute()) {
     retour("erreur_bdd", ["message" => $requete->error]);
@@ -62,6 +71,9 @@ $requete->close();
 // Récupération des données de l'utilisateur
 
 $requete = $db->prepare("SELECT droit FROM Utilisateurs WHERE login = ?");
+if (!$requete) {
+    retour("erreur_bdd_preparee", ["message" => $db->error]);
+}
 $requete->bind_param("s", $login);
 if (!$requete->execute()) {
     retour("erreur_bdd", ["message" => $requete->error]);

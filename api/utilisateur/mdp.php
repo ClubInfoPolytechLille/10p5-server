@@ -19,6 +19,9 @@ if ($login != donne("login")) {
 }
 
 $requete = $db->prepare("UPDATE Utilisateurs SET mdp=? WHERE login=?");
+if (!$requete) {
+    retour("erreur_bdd_preparee", ["message" => $db->error]);
+}
 $mdpHash = password_hash($_POST["mdp"], PASSWORD_DEFAULT);
 $requete->bind_param("ss", $mdpHash, $_POST["login"]);
 if (!$requete->execute()) {
