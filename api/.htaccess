@@ -2,6 +2,12 @@
 
 Options +FollowSymLinks -MultiViews
 
+ErrorDocument 401 '{"status":"non_authentifie"}\n'
+ErrorDocument 403 '{"status":"acces_refuse"}\n'
+ErrorDocument 404 '{"status":"requete_inconnue"}\n'
+ErrorDocument 500 '{"status":"erreur_interne"}\n'
+ErrorDocument 503 '{"status":"service_indisponible"}\n'
+
 RewriteEngine On
 RewriteBase /api/
 
