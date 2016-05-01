@@ -58,7 +58,7 @@ case TRANSACTION_VIDANGE:
     break;
 
 default:
-    retour("erreur_interne");
+    retour("erreur_script");
     break;
 }
 
