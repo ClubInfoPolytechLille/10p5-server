@@ -1,0 +1,22 @@
+{
+  "name": "10p5-server",
+  "homepage": "https://github.com/GeoffreyFrogeye/10p5-server",
+  "authors": [
+    "Le Club Info Polytech Lille <Club.Informatique@polytech-lille.fr>"
+  ],
+  "description": "Client web pour le système de paiment de 10⁵",
+  "main": "index.html",
+  "license": "Copyright",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "Materialize": "materialize#^0.97.6",
+    "material-icons": "^0.1.0"
+  }
+}
