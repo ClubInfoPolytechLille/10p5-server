@@ -9,6 +9,8 @@ var TRANSACTION_VIDANGE = 4
 
 var TRANSACTION_DUREE = 60
 
+var PEUT_NFC = false
+
 // Fonctions pour Materialize
 $(function(){
     $('.button-collapse').sideNav();
@@ -20,10 +22,14 @@ $(function(){
 var app = new Vue({
     el: 'body',
     data: {
+        // Constantes
+        PEUT_NFC: PEUT_NFC,
+        // Affichage
         page: 'connexion',
-        connecte: false,
         erreurTitre: '',
         erreurMessage: '',
+        // Session
+        connecte: false,
         date: 1,
     },
     methods: {
@@ -32,6 +38,10 @@ var app = new Vue({
             $.post('api/' + chemin, donnees, function(data) {
                 cb(data['status'], data);
             })
+        },
+        api: function(chemin, donnees, cb) {
+            donnees['jeton'] = this.jeton
+            this.apiBrute(chemin, donnees, cb)
         },
         // Affichage
         toast: function(texte) {
@@ -68,10 +78,32 @@ var app = new Vue({
                 }
             })
         },
+        creer: function() {
+            if (!this.peutCreer) return
+            var that = this
+            this.api("client/ajouter", {idCarte: this.idCarte, solde: this.solde}, function(retour, donnees) {
+                switch(retour) {
+                    case "ok":
+                        that.toast("Client " + that.idCarte + " crée avec un solde de " + that.solde + " €")
+                        break;
+
+                    case "solde_negatif":
+                        that.toast("Solde négatif")
+                        break;
+
+                    default:
+                        that.erreur(retour, donnees);
+                        break;
+                }
+            });
+        }
     },
     computed: {
         peutConnecter: function() {
             return this.login && this.mdp;
+        },
+        peutCreer: function() {
+            return this.solde && (this.PEUT_NFC || this.idCarte)
         },
         timer: function() {
             var secondes = this.connecte + JETON_DUREE - this.date

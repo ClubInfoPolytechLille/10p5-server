@@ -104,7 +104,7 @@
                     </div>
                 </form>
             </div>
-            <div v-if="peutNFC">
+            <div v-if="PEUT_NFC">
                 <h5>Avec votre carte étudiant</h5>
                 <p>Passez-la simplement devant le lecteur</p>
             </div>
@@ -116,12 +116,16 @@
                     <h5>Créer un nouveau client</h5>
                     <div class="row">
                         <form class="col s12">
+                            <div class="input-field col s12" v-if="!PEUT_NFC">
+                                <input type="text" name="idCarte" maxlength="8" v-model="idCarte">
+                                <label for="idCarte">Identifiant de la carte</label>
+                            </div>
                             <div class="input-field col s12">
-                                <input type="number" name="solde">
+                                <input type="number" name="solde" v-model="solde">
                                 <label for="solde">Solde initial (€)</label>
                             </div>
                             <div class="row center">
-                                <a class="btn-large waves-effect waves-light">Créer</a>
+                                <a class="btn-large waves-effect waves-light" @click="creer" :class="{'disabled': !peutCreer}">Créer</a>
                             </div>
                         </form>
                     </div>
@@ -130,6 +134,10 @@
                     <h5>Recharger un client</h5>
                     <div class="row">
                         <form class="col s12">
+                            <div class="input-field col s12" v-if="!PEUT_NFC">
+                                <input type="text" name="idCarte" maxlength="8" v-model="idCarte">
+                                <label for="idCarte">Identifiant de la carte</label>
+                            </div>
                             <div class="input-field col s12">
                                 <input type="number" name="credit">
                                 <label for="credit">Crédit (€)</label>
@@ -144,6 +152,12 @@
                     <h5>Vendre à un client</h5>
                     <div class="row">
                         <form class="col s12">
+                            <div class="input-field col s12" v-if="!PEUT_NFC">
+                                <input type="text" name="idCarte" maxlength="8" v-model="idCarte">
+                                <label for="idCarte">Identifiant de la carte</label>
+                            </div>
+                            <br/>
+                            <h6>En spécifiant le nombre de consommations</h6>
                             <div id="grilleBieres">
                                 <div class="row">
                                     <div class="col s4"><a class="waves-effect waves-light btn">1</a></div>
@@ -156,6 +170,8 @@
                                     <div class="col s4"><a class="waves-effect waves-light btn">6</a></div>
                                 </div>
                             </div>
+                            <br/>
+                            <h6>En spécifiant un montant</h6>
                             <div class="row">
                                 <div class="input-field col s12">
                                     <input type="number" name="prix">
@@ -170,6 +186,10 @@
                 </div>
                 <div id="vidange">
                     <h5>Vider le contenu de la carte d'un client</h5>
+                    <div class="input-field col s12" v-if="!PEUT_NFC">
+                        <input type="text" name="idCarte" maxlength="8" v-model="idCarte">
+                        <label for="idCarte">Identifiant de la carte</label>
+                    </div>
                     <div class="row center">
                         <a class="btn-large waves-effect waves-light">Vider</a>
                     </div>
