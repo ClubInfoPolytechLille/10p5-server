@@ -9,53 +9,80 @@ var TRANSACTION_VIDANGE = 4
 
 var TRANSACTION_DUREE = 60
 
-// Informations de connexion
-
-var login, droit, jeton, debut;
-
 // Fonctions pour Materialize
 $(function(){
     $('.button-collapse').sideNav();
     $('.modal-trigger').leanModal()
-}); // end of document ready
-
-// Fonctions communes
-
-function APIbrute(chemin, donnees, cb) {
-    var url = "api/" + chemin;
-    $.post(url, donnees, function(data) {
-        cb(data['status'], data);
-    })
-
-}
-
-function toast(texte) {
-    Materialize.toast(texte, 4000);
-}
-
-// Connexion
-$("#connecter").click(function() {
-    var login = $("#login").val();
-    var mdp = $("#mdp").val();
-    APIbrute("utilisateur/connexion", {login: login , mdp: mdp} , function(retour, donnees) {
-        switch(retour) {
-            case "identifiants_invalides":
-                toast("Identifiants invalides")
-                break;
-
-            case "ok":
-                login = donnees.login;
-                droit = donnees.droit;
-                jeton = donnees.jeton;
-                toast("Correctement identifié en tant que " + login + " pour 10 minutes")
-               break;
-
-           default:
-                toast("Erreur interne");
-                break;
-        }
-    });
 });
+
+// Application
+
+var app = new Vue({
+    el: 'body',
+    data: {
+        nomApplication: "10⁵",
+        connecte: false,
+        erreurTitre: '',
+        erreurMessage: '',
+        date: 1,
+    },
+    methods: {
+        // API
+        apiBrute: function(chemin, donnees, cb) {
+            $.post('api/' + chemin, donnees, function(data) {
+                cb(data['status'], data);
+            })
+        },
+        // Affichage
+        toast: function(texte) {
+            Materialize.toast(texte, 4000);
+        },
+        erreur: function(retour, donnees) {
+            this.erreurTitre = retour
+            this.erreurMessage = donnees['message']
+            $("#modalErreur").openModal();
+        },
+        // Fonctionnement
+        connecter: function() {
+            if (!this.peutConnecter) return
+            var that = this;
+            this.apiBrute("utilisateur/connexion", {login: this.login , mdp: this.mdp} , function(retour, donnees) {
+                that.mdp = ''
+                switch(retour) {
+                    case "ok":
+                        that.login = donnees.login
+                        that.droit = donnees.droit
+                        that.jeton = donnees.jeton
+                        that.connecte = that.date
+                        that.toast("Correctement identifié en tant que " + that.login + " pour 10 minutes")
+                       break;
+
+                    case "identifiants_invalides":
+                        that.toast("Identifiants invalides")
+                        break;
+
+                    default:
+                        that.erreur(retour, donnees);
+                        break;
+                }
+            })
+        },
+    },
+    computed: {
+        peutConnecter: function() {
+            return this.login && this.mdp;
+        },
+        timer: function() {
+            var secondes = this.connecte + JETON_DUREE - this.date
+            return Math.floor(secondes/60) + ':' + (secondes % 60)
+        }
+    },
+})
+
+setInterval(function actualiserDate() {
+    app.$data.date = Math.floor(Date.now()/1000)
+}, 1000);
+
 
 // Placeholder
 function vendu() {

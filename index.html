@@ -14,12 +14,25 @@
 
 <body>
     <!-- Réutilisable -->
+    <div id="modalErreur" class="modal">
+        <div class="modal-content">
+            <h4>{{ erreurTitre }}</h4>
+            <p v-if="modalGeneriqueContenu">{{ erreurMessage }}</p>
+        </div>
+        <div class="modal-footer">
+            <a class="modal-action modal-close waves-effect btn-flat">Ça marche</a>
+        </div>
+    </div>
     <!-- Page -->
     <nav class="red" role="navigation">
         <div class="nav-wrapper container">
-            <a id="logo-container" href="#" class="brand-logo">10⁵</a>
+            <a id="logo-container" href="#" class="brand-logo">{{ nomApplication }}</a>
             <ul class="right hide-on-med-and-down">
-                <li><a class="dropdown-button" href="#!" data-activates="menuUtilisateur"><i class="material-icons">perm_identity</i> vigou (<i class="material-icons">timer</i> 3:12)</a></li>
+                <li v-if="connecte">
+                    <a class="dropdown-button" href="#!" data-activates="menuUtilisateur">
+                        <i class="material-icons">perm_identity</i> {{ login }} (<i class="material-icons">timer</i> {{ timer }})
+                    </a>
+                </li>
             </ul>
             <ul id="nav-mobile" class="side-nav">
                 <li><a href="#">TODO</a></li>
@@ -31,28 +44,30 @@
         <div class="container">
             <br><br><br>
             <h4>Se connecter</h4>
-            <h4>Avec votre identifiant et votre mot de passe</h4>
+            <h5>Avec votre identifiant et votre mot de passe</h5>
             <div class="row">
                 <form class="col s12">
                     <div class="row">
                         <div class="input-field col s12">
-                            <input type="text" id="login">
+                            <input type="text" name="login" v-model="login">
                             <label for="login">Identifiant</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
-                            <input type="password" id="mdp">
+                            <input type="password" name="mdp" v-model="mdp">
                             <label for="mdp">Mot de passe</label>
                         </div>
                     </div>
                     <div class="row">
-                        <a href="#!" id="connecter" class="btn-large waves-effect waves-light">Se connecter</a>
+                        <a href="#!" class="btn-large waves-effect waves-light disabled" @click="connecter" :class="{'disabled': !peutConnecter}">Se connecter</a>
                     </div>
                 </form>
             </div>
-            <h5>Avec votre carte étudiant</h5>
-            <p>Passez-la simplement devant le lecteur</p>
+            <div v-if="peutNFC">
+                <h5>Avec votre carte étudiant</h5>
+                <p>Passez-la simplement devant le lecteur</p>
+            </div>
         </div>
     </div>
     </div>
@@ -68,6 +83,7 @@
     <!--  Scripts-->
     <script src="lib/jquery/dist/jquery.min.js"></script>
     <script src="lib/Materialize/dist/js/materialize.min.js"></script>
+    <script src="lib/vue/dist/vue.min.js"></script>
     <script src="js/init.js"></script>
 
 </body>
