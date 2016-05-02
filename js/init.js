@@ -16,6 +16,7 @@ $(function(){
     $('.button-collapse').sideNav();
     $('.modal-trigger').leanModal()
     $('form').submit(function() { return false });
+    $('[name=idCarte]').characterCounter();
 });
 
 // Application
