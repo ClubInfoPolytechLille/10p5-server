@@ -11,10 +11,11 @@ var TRANSACTION_DUREE = 60
 
 var PEUT_NFC = false
 
-// Fonctions pour Materialize
+// Préparation de l'interactivité
 $(function(){
     $('.button-collapse').sideNav();
     $('.modal-trigger').leanModal()
+    $('form').submit(function() { return false });
 });
 
 // Application
@@ -54,7 +55,7 @@ var app = new Vue({
         },
         // Fonctionnement
         connecter: function() {
-            if (!this.peutConnecter) return
+            console.log(57)
             var that = this;
             this.apiBrute("utilisateur/connexion", {login: this.login , mdp: this.mdp} , function(retour, donnees) {
                 that.mdp = ''
@@ -77,9 +78,9 @@ var app = new Vue({
                         break;
                 }
             })
+            return false
         },
         creer: function() {
-            if (!this.peutCreer) return
             var that = this
             this.api("client/ajouter", {idCarte: this.idCarte, solde: this.solde}, function(retour, donnees) {
                 switch(retour) {
@@ -99,12 +100,6 @@ var app = new Vue({
         }
     },
     computed: {
-        peutConnecter: function() {
-            return this.login && this.mdp;
-        },
-        peutCreer: function() {
-            return this.solde && (this.PEUT_NFC || this.idCarte)
-        },
         timer: function() {
             var secondes = this.connecte + JETON_DUREE - this.date
             var minutes = Math.floor(secondes/60)

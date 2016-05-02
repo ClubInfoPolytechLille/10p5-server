@@ -5,7 +5,7 @@
 @import "../lib/Materialize/sass/components/color";
 
 // Définition de la couleur principale de Materialize
-$primary-color: color("red", "lighten-2") !default;
+$primary-color: color("red", "base") !default;
 $primary-color-light: lighten($primary-color, 15%) !default;
 $primary-color-dark: darken($primary-color, 15%) !default;
 
@@ -14,12 +14,18 @@ $success-color: color("green", "base") !default;
 $error-color: color("pink", "base") !default;
 $link-color: color("blue", "darken-1") !default;
 
+// Couleur des onglets : texte clair sur fond coloré
+$tabs-underline-color: $secondary-color !default;
+$tabs-text-color: #fff !default;
+$tabs-bg-color: $primary-color !default;
+
 // Import du reste de Materialize
 @import "../lib/Materialize/sass/materialize.scss";
 
 // Import des icônes Material Design
 @import "../lib/material-design-icons/iconfont/material-icons.css";
 
+// Permet le footer de se mettre toujours en bas
 body {
     display: flex;
     min-height: 100vh;
@@ -28,39 +34,70 @@ body {
 
 #main {
     flex: 1 0 auto;
-}
-
-nav i.material-icons {
-    display: inline;
-    font-size: 1rem;
-}
-
-nav .tabs .tab a {
-    color: white;
-}
-
-nav .tabs .indicator {
-    background-color: #fff59d;
-}
-
-#toast-container {
-    top: inherit;
-    bottom: 10%;
-}
-
-#toast a {
-    text-transform: uppercase;
-}
-
-#grilleBieres a {
-    width: 90%;
-    padding: 25px;
-    height: 100px;
-    font-size: 3em;
+    margin-top: 100px;
 }
 
 footer.page-footer {
     margin-top: 0;
     padding-top: 0;
+}
+
+// Suppression de l'espace entre les onglets
+nav {
+    line-height: $navbar-height-mobile;
+}
+
+// Affichage correct des icônes dans le header
+nav i.material-icons {
+    display: inline;
+    font-size: 1rem;
+}
+
+// Stylisation de tous les boutons
+button {
+    @extend .btn-large;
+    @extend .waves-effect;
+    @extend .waves-light;
+}
+
+button[disabled] {
+    @extend .disabled;
+}
+
+// Simplification des formulaires
+form {
+    @extend .row;
+    >.input-field {
+        @extend .col;
+        @extend .s12;
+    }
+}
+
+
+
+// On met les toasts en bas
+#toast-container {
+    top: inherit;
+    bottom: 10%;
+
+    a {
+        text-transform: uppercase;
+    }
+}
+
+#grilleBieres {
+    >div {
+        @extend .row;
+        >div {
+            @extend .col;
+            @extend .s4;
+            >button {
+                width: 90%;
+                padding: 25px;
+                height: 150px;
+                font-size: 3em;
+            }
+        }
+    }
 }
 

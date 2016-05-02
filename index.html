@@ -50,7 +50,7 @@
     </div>
 
     <!-- Page -->
-    <nav class="red" role="navigation">
+    <nav role="navigation">
         <div class="nav-wrapper container">
             <a class="brand-logo" v-if="page == 'connexion'">10⁵</a>
             <div class="left" v-else>
@@ -68,8 +68,8 @@
                 <li><a>TODO</a></li>
             </ul>
         </div>
-        <div class="col s12 red" v-show="page == 'operations'">
-            <ul class="tabs red">
+        <div class="col s12" v-show="page == 'operations'">
+            <ul class="tabs">
                 <li class="tab col s3"><a href="#creation">Création</a></li>
                 <li class="tab col s3"><a href="#rechargement">Rechargement</a></li>
                 <li class="tab col s3"><a class="active" href="#paiement">Paiement</a></li>
@@ -78,125 +78,102 @@
         </div>
     </nav>
 
-    <div class="section no-pad-bot" id="main">
-        <br><br><br>
+    <div id="main">
         <div class="container" v-show="page == 'connexion'">
             <h4>Se connecter</h4>
-            <h5>Avec votre identifiant et votre mot de passe</h5>
-            <div class="row">
-                <form class="col s12">
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <input type="text" name="login" v-model="login">
-                            <label for="login">Identifiant</label>
-                        </div>
+            <div>
+                <h5>Avec votre identifiant et votre mot de passe</h5>
+                <form @submit="connecter">
+                    <div class="input-field">
+                        <input type="text" name="login" v-model="login">
+                        <label for="login">Identifiant</label>
                     </div>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <input type="password" name="mdp" v-model="mdp">
-                            <label for="mdp">Mot de passe</label>
-                        </div>
+                    <div class="input-field">
+                        <input type="password" name="mdp" v-model="mdp">
+                        <label for="mdp">Mot de passe</label>
                     </div>
-                    <div class="row">
-                        <a class="btn-large waves-effect waves-light disabled" @click="connecter" :class="{'disabled': !peutConnecter}">Se connecter</a>
-                    </div>
-                </form>
+                    <button :disabled="!login || !mdp">Se connecter</button>
             </div>
-            <div v-if="PEUT_NFC">
-                <h5>Avec votre carte étudiant</h5>
-                <p>Passez-la simplement devant le lecteur</p>
-            </div>
+            </form>
+        </div>
+        <div v-if="PEUT_NFC">
+            <h5>Avec votre carte étudiant</h5>
+            <p>Passez-la simplement devant le lecteur.</p>
         </div>
 
         <div class="container" v-show="page == 'operations'">
             <div class="row center">
                 <div id="creation">
                     <h5>Créer un nouveau client</h5>
-                    <div class="row">
-                        <form class="col s12">
-                            <div class="input-field col s12" v-if="!PEUT_NFC">
-                                <input type="text" name="idCarte" maxlength="8" v-model="idCarte">
-                                <label for="idCarte">Identifiant de la carte</label>
-                            </div>
-                            <div class="input-field col s12">
-                                <input type="number" name="solde" v-model="solde">
-                                <label for="solde">Solde initial (€)</label>
-                            </div>
-                            <div class="row center">
-                                <a class="btn-large waves-effect waves-light" @click="creer" :class="{'disabled': !peutCreer}">Créer</a>
-                            </div>
-                        </form>
-                    </div>
+                    <form @submit="creer">
+                        <div class="input-field" v-if="!PEUT_NFC">
+                            <input type="text" name="idCarte" maxlength="8" v-model="idCarte">
+                            <label for="idCarte">Identifiant de la carte</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="number" name="solde" v-model="solde">
+                            <label for="solde">Solde initial (€)</label>
+                        </div>
+                        <button :disabled="!solde || (!PEUT_NFC && !idCarte)">Créer</button>
+                    </form>
                 </div>
                 <div id="rechargement">
                     <h5>Recharger un client</h5>
-                    <div class="row">
-                        <form class="col s12">
-                            <div class="input-field col s12" v-if="!PEUT_NFC">
-                                <input type="text" name="idCarte" maxlength="8" v-model="idCarte">
-                                <label for="idCarte">Identifiant de la carte</label>
-                            </div>
-                            <div class="input-field col s12">
-                                <input type="number" name="credit">
-                                <label for="credit">Crédit (€)</label>
-                            </div>
-                            <div class="row center">
-                                <a class="btn-large waves-effect waves-light btn modal-trigger">Recharger</a>
-                            </div>
-                        </form>
-                    </div>
+                    <form @submit="recharger">
+                        <div class="input-field" v-if="!PEUT_NFC">
+                            <input type="text" name="idCarte" maxlength="8" v-model="idCarte">
+                            <label for="idCarte">Identifiant de la carte</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="number" name="credit" v-model="credit">
+                            <label for="credit">Crédit (€)</label>
+                        </div>
+                        <button :disabled="!credit || (!PEUT_NFC && !idCarte)">Créer</button>
+                    </form>
                 </div>
                 <div id="paiement">
                     <h5>Vendre à un client</h5>
-                    <div class="row">
-                        <form class="col s12">
-                            <div class="input-field col s12" v-if="!PEUT_NFC">
-                                <input type="text" name="idCarte" maxlength="8" v-model="idCarte">
-                                <label for="idCarte">Identifiant de la carte</label>
-                            </div>
-                            <br/>
+                    <form @submit="payer">
+                        <div class="input-field" v-if="!PEUT_NFC">
+                            <input type="text" name="idCarte" maxlength="8" v-model="idCarte">
+                            <label for="idCarte">Identifiant de la carte</label>
+                        </div>
+                        <div>
                             <h6>En spécifiant le nombre de consommations</h6>
                             <div id="grilleBieres">
-                                <div class="row">
-                                    <div class="col s4"><a class="waves-effect waves-light btn">1</a></div>
-                                    <div class="col s4"><a class="waves-effect waves-light btn">2</a></div>
-                                    <div class="col s4"><a class="waves-effect waves-light btn">3</a></div>
+                                <div>
+                                    <div v-for="i in [1, 2, 3]"><button :disabled="!PEUT_NFC && !idCarte">{{ i }}</button></div>
                                 </div>
-                                <div class="row">
-                                    <div class="col s4"><a class="waves-effect waves-light btn">4</a></div>
-                                    <div class="col s4"><a class="waves-effect waves-light btn">5</a></div>
-                                    <div class="col s4"><a class="waves-effect waves-light btn">6</a></div>
+                                <div>
+                                    <div v-for="i in [4, 5, 6]"><button :disabled="!PEUT_NFC && !idCarte">{{ i }}</button></div>
                                 </div>
                             </div>
-                            <br/>
+                        </div>
+                        <div class="row">
                             <h6>En spécifiant un montant</h6>
-                            <div class="row">
-                                <div class="input-field col s12">
-                                    <input type="number" name="prix">
-                                    <label for="prix">Prix (€)</label>
-                                </div>
+                            <div class="input-field">
+                                <input type="number" name="prix" v-model="prix">
+                                <label for="prix">Prix (€)</label>
                             </div>
-                            <div class="row center">
-                                <a class="btn-large waves-effect waves-light">Payer</a>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        <button :disabled="!prix || (!PEUT_NFC && !idCarte)">Payer</button>
+                    </form>
                 </div>
                 <div id="vidange">
                     <h5>Vider le contenu de la carte d'un client</h5>
-                    <div class="input-field col s12" v-if="!PEUT_NFC">
-                        <input type="text" name="idCarte" maxlength="8" v-model="idCarte">
-                        <label for="idCarte">Identifiant de la carte</label>
-                    </div>
-                    <div class="row center">
-                        <a class="btn-large waves-effect waves-light">Vider</a>
-                    </div>
+                    <form @submit="vidanger">
+                        <div class="input-field" v-if="!PEUT_NFC">
+                            <input type="text" name="idCarte" maxlength="8" v-model="idCarte">
+                            <label for="idCarte">Identifiant de la carte</label>
+                        </div>
+                        <button :disabled="!PEUT_NFC && !idCarte">Vider</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer class="page-footer red">
+    <footer class="page-footer">
         <div class="footer-copyright">
             <div class="container">
                 10p5 v0.0.0 - © Copyright 2016, <a href="http://clubinfo.plil.net">Le Club Info Polytech Lille</a>
