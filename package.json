@@ -1,0 +1,23 @@
+{
+  "name": "10p5-server",
+  "version": "0.0.0",
+  "description": "Client web pour le système de paiment de 10⁵",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeoffreyFrogeye/10p5-server.git"
+  },
+  "author": "Le Club Info Polytech Lille <Club.Informatique@polytech-lille.fr>",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/GeoffreyFrogeye/10p5-server/issues"
+  },
+  "homepage": "https://github.com/GeoffreyFrogeye/10p5-server#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-sass": "^2.3.1"
+  }
+}

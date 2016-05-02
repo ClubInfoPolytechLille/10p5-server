@@ -1,0 +1,66 @@
+@charset "UTF-8";
+
+// Importation des Mixins de Materialize
+@import "../lib/Materialize/sass/components/mixins";
+@import "../lib/Materialize/sass/components/color";
+
+// Définition de la couleur principale de Materialize
+$primary-color: color("red", "lighten-2") !default;
+$primary-color-light: lighten($primary-color, 15%) !default;
+$primary-color-dark: darken($primary-color, 15%) !default;
+
+$secondary-color: color("indigo", "lighten-1") !default;
+$success-color: color("green", "base") !default;
+$error-color: color("pink", "base") !default;
+$link-color: color("blue", "darken-1") !default;
+
+// Import du reste de Materialize
+@import "../lib/Materialize/sass/materialize.scss";
+
+// Import des icônes Material Design
+@import "../lib/material-design-icons/iconfont/material-icons.css";
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+#main {
+    flex: 1 0 auto;
+}
+
+nav i.material-icons {
+    display: inline;
+    font-size: 1rem;
+}
+
+nav .tabs .tab a {
+    color: white;
+}
+
+nav .tabs .indicator {
+    background-color: #fff59d;
+}
+
+#toast-container {
+    top: inherit;
+    bottom: 10%;
+}
+
+#toast a {
+    text-transform: uppercase;
+}
+
+#grilleBieres a {
+    width: 90%;
+    padding: 25px;
+    height: 100px;
+    font-size: 3em;
+}
+
+footer.page-footer {
+    margin-top: 0;
+    padding-top: 0;
+}
+
