@@ -20,7 +20,7 @@ $(function(){
 var app = new Vue({
     el: 'body',
     data: {
-        nomApplication: "10⁵",
+        page: 'connexion',
         connecte: false,
         erreurTitre: '',
         erreurMessage: '',
@@ -54,7 +54,8 @@ var app = new Vue({
                         that.droit = donnees.droit
                         that.jeton = donnees.jeton
                         that.connecte = that.date
-                        that.toast("Correctement identifié en tant que " + that.login + " pour 10 minutes")
+                        that.toast("Correctement identifié en tant que " + that.login + " pour " + JETON_DUREE/60+ " minutes")
+                        that.page = 'operations'
                        break;
 
                     case "identifiants_invalides":
@@ -74,7 +75,9 @@ var app = new Vue({
         },
         timer: function() {
             var secondes = this.connecte + JETON_DUREE - this.date
-            return Math.floor(secondes/60) + ':' + (secondes % 60)
+            var minutes = Math.floor(secondes/60)
+            var secondes = secondes % 60
+            return  minutes + ':' + (secondes < 10 ? '0' : '') + secondes
         }
     },
 })

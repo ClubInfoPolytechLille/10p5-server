@@ -24,7 +24,6 @@ nav .tabs .indicator {
 #toast-container {
     top: inherit;
     bottom: 10%;
-
 }
 
 #toast a {
@@ -41,5 +40,5 @@ nav .tabs .indicator {
 footer.page-footer {
     margin-top: 0;
     padding-top: 0;
-
 }
+
