@@ -17,6 +17,6 @@
   ],
   "dependencies": {
     "Materialize": "materialize#^0.97.6",
-    "material-icons": "^0.1.0"
+    "material-design-icons": "^2.2.3"
   }
 }
