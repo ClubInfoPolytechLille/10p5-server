@@ -9,7 +9,7 @@ ErrorDocument 500 '{"status":"erreur_interne"}\n'
 ErrorDocument 503 '{"status":"service_indisponible"}\n'
 
 RewriteEngine On
-RewriteBase /api/
+RewriteBase /~geoffrey/10p5-server/api/
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.php -f
