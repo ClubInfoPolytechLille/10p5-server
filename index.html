@@ -118,7 +118,7 @@
                             <input type="number" name="solde" v-model="solde">
                             <label for="solde">Solde initial (€)</label>
                         </div>
-                        <button :disabled="!solde || (!PEUT_NFC && !idCarte)">Créer</button>
+                        <button type="submit" :disabled="!solde || (!PEUT_NFC && !idCarte)">Créer</button>
                     </form>
                 </div>
                 <div id="rechargement">
@@ -134,12 +134,12 @@
                             <input type="number" name="credit" v-model="credit">
                             <label for="credit">Crédit (€)</label>
                         </div>
-                        <button :disabled="!credit || (!PEUT_NFC && !idCarte)">Créer</button>
+                        <button type="submit" :disabled="!credit || (!PEUT_NFC && !idCarte)">Recharger</button>
                     </form>
                 </div>
                 <div id="paiement">
                     <h4>Vendre à un client</h4>
-                    <form @submit="payer">
+                    <form>
                         <div class="input-field" v-if="!PEUT_NFC">
                             <i class="material-icons prefix">credit_card</i>
                             <input type="text" name="idCarte" length="8" v-model="idCarte">
@@ -150,7 +150,7 @@
                         </div>
                         <div id="grilleBieres">
                             <div>
-                                <div v-for="i in [1, 2, 3, 4, 5, 6]"><button :disabled="!PEUT_NFC && !idCarte">{{ i }}</button></div>
+                                <div v-for="i in [1, 2, 3, 4, 5, 6]"><button type="button" @click="payer(i)" :disabled="prix || (!PEUT_NFC && !idCarte)">{{ i }}</button></div>
                             </div>
                         </div>
                         <div class="row">
@@ -161,7 +161,7 @@
                             <input type="number" name="prix" v-model="prix">
                             <label for="prix">Prix (€)</label>
                         </div>
-                        <button :disabled="!prix || (!PEUT_NFC && !idCarte)">Payer</button>
+                        <button type="submit" @click="payer" :disabled="!prix || (!PEUT_NFC && !idCarte)">Payer</button>
                     </form>
                 </div>
                 <div id="vidange">
@@ -172,7 +172,7 @@
                             <input type="text" name="idCarte" length="8" v-model="idCarte">
                             <label for="idCarte">Identifiant de la carte</label>
                         </div>
-                        <button :disabled="!PEUT_NFC && !idCarte">Vider</button>
+                        <button type="submit" :disabled="!PEUT_NFC && !idCarte">Vider</button>
                     </form>
                 </div>
             </div>

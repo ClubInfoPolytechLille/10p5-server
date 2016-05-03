@@ -56,7 +56,6 @@ var app = new Vue({
         },
         // Fonctionnement
         connecter: function() {
-            console.log(57)
             var that = this;
             this.apiBrute("utilisateur/connexion", {login: this.login , mdp: this.mdp} , function(retour, donnees) {
                 that.mdp = ''
@@ -69,10 +68,6 @@ var app = new Vue({
                         that.toast("Correctement identifié en tant que " + that.login + " pour " + JETON_DUREE/60+ " minutes")
                         that.page = 'operations'
                        break;
-
-                    case "identifiants_invalides":
-                        that.toast("Identifiants invalides")
-                        break;
 
                     default:
                         that.erreur(retour, donnees);
@@ -89,8 +84,18 @@ var app = new Vue({
                         that.toast("Client " + that.idCarte + " crée avec un solde de " + that.solde + " €")
                         break;
 
-                    case "solde_negatif":
-                        that.toast("Solde négatif")
+                    default:
+                        that.erreur(retour, donnees);
+                        break;
+                }
+            });
+        },
+        recharger: function() {
+            var that = this
+            this.api("client/recharger", {idCarte: this.idCarte, montant: this.credit}, function(retour, donnees) {
+                switch(retour) {
+                    case "ok":
+                        that.toast("Client " + that.idCarte + " rechargé : " + donnees.soldeAncien + " + " + that.credit + " → " + donnees.soldeNouveau + " €")
                         break;
 
                     default:
@@ -98,7 +103,41 @@ var app = new Vue({
                         break;
                 }
             });
-        }
+        },
+        payer: function(quantite) {
+            var that = this
+            var options = {idCarte: this.idCarte}
+            if (typeof(quantite) == 'number') {
+                options.quantite = quantite
+            } else {
+                options.montant = that.prix
+            }
+            this.api("client/payer", options, function(retour, donnees) {
+                switch(retour) {
+                    case "ok":
+                        that.toast("Client " + that.idCarte + " débité : " + donnees.soldeAncien + " - " + donnees.montant + " → " + donnees.soldeNouveau + " €")
+                        break;
+
+                    default:
+                        that.erreur(retour, donnees);
+                        break;
+                }
+            });
+        },
+        vidanger: function() {
+            var that = this
+            this.api("client/vidange", {idCarte: this.idCarte}, function(retour, donnees) {
+                switch(retour) {
+                    case "ok":
+                        that.toast("Client " + that.idCarte + " vidé : " + donnees.soldeAncien + " → 0 €")
+                        break;
+
+                    default:
+                        that.erreur(retour, donnees);
+                        break;
+                }
+            });
+        },
     },
     computed: {
         timer: function() {

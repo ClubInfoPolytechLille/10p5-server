@@ -65,6 +65,6 @@ $requete->close();
 $idTransaction = transaction(TRANSACTION_PAIEMENT, $_POST["idCarte"], $montant, $quantite);
 
 
-retour("ok", ["idTransaction" => $idTransaction, "soldeAncien" => $soldeAncien, "soldeNouveau" => $soldeNouveau]);
+retour("ok", ["idTransaction" => $idTransaction, "montant" => $montant, "soldeAncien" => $soldeAncien, "soldeNouveau" => $soldeNouveau]);
 
 ?>
