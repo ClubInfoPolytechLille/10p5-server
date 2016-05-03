@@ -42,10 +42,12 @@ footer.page-footer {
     padding-top: 0;
 }
 
-// Suppression de l'espace entre les onglets
+// Adaptation de la nav aux onglets
 nav {
-    line-height: $navbar-height-mobile;
+    height: initial;
+    min-height: $navbar-height;
 }
+
 
 // Affichage correct des icônes dans le header
 nav i.material-icons {

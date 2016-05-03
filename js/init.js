@@ -54,6 +54,27 @@ var app = new Vue({
             this.erreurMessage = donnees['message']
             $("#modalErreur").openModal();
         },
+        annuler(id) {
+            var that = this
+            this.api("annuler", {idTransaction: id}, function(retour, donnees) {
+                switch(retour) {
+                    case "ok":
+                        that.toast("Client " + donnees.client + " : " + donnees.soldeAncien + " → " + donnees.soldeNouveau)
+                        break;
+
+                    default:
+                        that.erreur(retour, donnees);
+                        break;
+                }
+            });
+        },
+        transaction(id, texte) {
+            var that = this
+            var interieur = $('<span>').text(texte + ' ').append($('<a>').text('Annuler').one('click', function() {
+                that.annuler(id)
+            }))
+            that.toast(interieur);
+        },
         // Fonctionnement
         connecter: function() {
             var that = this;
@@ -67,7 +88,7 @@ var app = new Vue({
                         that.connecte = that.date
                         that.toast("Correctement identifié en tant que " + that.login + " pour " + JETON_DUREE/60+ " minutes")
                         that.page = 'operations'
-                       break;
+                        break;
 
                     default:
                         that.erreur(retour, donnees);
@@ -81,7 +102,7 @@ var app = new Vue({
             this.api("client/ajouter", {idCarte: this.idCarte, solde: this.solde}, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
-                        that.toast("Client " + that.idCarte + " crée avec un solde de " + that.solde + " €")
+                        that.transaction(donnees.idTransaction, "Client " + that.idCarte + " crée avec un solde de " + that.solde + " €")
                         break;
 
                     default:
@@ -95,7 +116,7 @@ var app = new Vue({
             this.api("client/recharger", {idCarte: this.idCarte, montant: this.credit}, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
-                        that.toast("Client " + that.idCarte + " rechargé : " + donnees.soldeAncien + " + " + that.credit + " → " + donnees.soldeNouveau + " €")
+                        that.transaction(donnees.idTransaction, "Client " + that.idCarte + " rechargé : " + donnees.soldeAncien + " + " + that.credit + " → " + donnees.soldeNouveau + " €")
                         break;
 
                     default:
@@ -115,7 +136,7 @@ var app = new Vue({
             this.api("client/payer", options, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
-                        that.toast("Client " + that.idCarte + " débité : " + donnees.soldeAncien + " - " + donnees.montant + " → " + donnees.soldeNouveau + " €")
+                        that.transaction(donnees.idTransaction, "Client " + that.idCarte + " débité : " + donnees.soldeAncien + " - " + donnees.montant + " → " + donnees.soldeNouveau + " €")
                         break;
 
                     default:
@@ -129,7 +150,7 @@ var app = new Vue({
             this.api("client/vidange", {idCarte: this.idCarte}, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
-                        that.toast("Client " + that.idCarte + " vidé : " + donnees.soldeAncien + " → 0 €")
+                        that.transaction(donnees.idTransaction, "Client " + that.idCarte + " vidé : " + donnees.soldeAncien + " → 0 €")
                         break;
 
                     default:

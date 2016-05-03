@@ -64,16 +64,14 @@
                     </a>
                 </li>
             </ul>
-            <ul class="side-nav">
-                <li><a>TODO</a></li>
-            </ul>
-        </div>
-        <div class="col s12" v-show="page == 'operations'">
-            <ul class="tabs">
+            <ul class="tabs" v-show="page == 'operations'">
                 <li class="tab col s3"><a href="#creation">Création</a></li>
                 <li class="tab col s3"><a href="#rechargement">Rechargement</a></li>
                 <li class="tab col s3"><a class="active" href="#paiement">Paiement</a></li>
                 <li class="tab col s3"><a href="#vidange">Vidange</a></li>
+            </ul>
+            <ul class="side-nav">
+                <li><a>TODO</a></li>
             </ul>
         </div>
     </nav>
