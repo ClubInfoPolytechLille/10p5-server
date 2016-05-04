@@ -31,8 +31,13 @@ var app = new Vue({
         erreurTitre: '',
         erreurMessage: '',
         // Session
+        login: '',
+        droit: '',
+        jeton: '',
         connecte: false,
         date: 1,
+        // Données
+        clients: [],
         transactions: [],
     },
     methods: {
@@ -46,12 +51,25 @@ var app = new Vue({
             donnees['jeton'] = this.jeton
             this.apiBrute(chemin, donnees, cb)
         },
+        actuClients: function() {
+            var that = this
+            this.api("client/liste", {}, function(retour, donnees) {
+                switch(retour) {
+                    case "ok":
+                        that.clients = donnees.clients
+                        break;
+
+                    default:
+                        that.erreur(retour, donnees);
+                        break;
+                }
+            })
+        },
         actuTransactions: function() {
             var that = this
             this.api("transactions", {}, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
-                        console.log(donnees.transactions[0].type, TRANSACTION_CREATION)
                         that.transactions = donnees.transactions
                         break;
 
@@ -60,8 +78,8 @@ var app = new Vue({
                         break;
                 }
             })
-
         },
+
         // Affichage
         toast: function(texte) {
             Materialize.toast(texte, 4000);
@@ -116,7 +134,7 @@ var app = new Vue({
         },
         creer: function() {
             var that = this
-            this.api("client/ajouter", {idCarte: this.idCarte, solde: this.solde}, function(retour, donnees) {
+            this.api("client/ajouter", {idCarte: this.idCarte, solde: this.solde, decouvert: this.decouvert}, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
                         that.transaction(donnees.idTransaction, "Client " + that.idCarte + " crée avec un solde de " + that.solde + " €")

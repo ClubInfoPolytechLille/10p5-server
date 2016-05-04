@@ -133,6 +133,17 @@
                             <input type="number" name="solde" v-model="solde">
                             <label for="solde">Solde initial (€)</label>
                         </div>
+                        <div class="input-field" v-if="droit >= 3">
+                            <strong>Découvert autorisé</strong>
+                            <div class="switch">
+                                <label>
+                                    Non
+                                    <input v-model="decouvert" type="checkbox">
+                                    <span class="lever"></span>
+                                    Oui
+                                </label>
+                            </div>
+                        </div>
                         <button type="submit" :disabled="!solde || (!PEUT_NFC && !idCarte)">Créer</button>
                     </form>
                 </div>
@@ -197,12 +208,37 @@
             <div class="row">
                 <div id="clients">
                     <h4>Liste des clients</h4>
+                    <button @click="actuClients">Rafraîchir</button>
+                    <ul class="collapsible popout" data-collapsible="accordion">
+                        <li v-for="client in clients">
+                            <div class="collapsible-header">
+                                <i class="material-icons">perm_identity</i> {{ client.idCarte }} : {{ client.solde }} €
+                            </div>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li v-if="droit >= 3">
+                                        <strong>Découvert autorisé</strong>
+                                        <div class="switch">
+                                            <label>
+                                                Non
+                                                <input v-model="client.decouvert" type="checkbox">
+                                                <span class="lever"></span>
+                                                Oui
+                                            </label>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <h5>Transactions</h5>
+                                <p>TODO</p>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
                 <div id="transactions">
                     <h4>Liste des transactions</h4>
                     <button @click="actuTransactions">Rafraîchir</button>
                     <ul class="collapsible popout" data-collapsible="accordion">
-                        <li v-for="transaction in transactions">
+                        <li v-for="transaction in transactions | orderBy 'date' -1">
                             <div class="collapsible-header" :class="{'red': !transaction.valide}">
                                 <span v-if="transaction.type == 1">
                                     <i class="material-icons">trending_flat</i> {{ transaction.client }} : {{ transaction.montant }} €
@@ -228,7 +264,7 @@
                                         <span v-if="transaction.type == 4">Vidange</span>
                                     </li>
                                     <li>
-                                        <strong>Date :</strong> {{ transaction.date }}
+                                        <strong>Date :</strong> <span v-text="transaction.date | date"></span>
                                     </li>
                                     <li>
                                         <strong>Utilisateur :</strong> {{ transaction.utilisateur }}
