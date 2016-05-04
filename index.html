@@ -51,42 +51,46 @@
 
     <!-- Page -->
     <nav role="navigation">
-        <div class="nav-wrapper container">
-            <a class="brand-logo" v-if="page == 'connexion'">10⁵</a>
-            <div class="left" v-else>
-                <a class="breadcrumb">10⁵</a>
-                <a class="breadcrumb" v-if="page == 'operations'">Opérations</a>
-                <a class="breadcrumb" v-if="page == 'gestion'">Gestion</a>
+        <div>
+            <div>
+                <a class="brand-logo" v-if="page == 'connexion'">10⁵</a>
+                <div class="left" v-else>
+                    <a class="breadcrumb">10⁵</a>
+                    <a class="breadcrumb" v-if="page == 'operations'">Opérations</a>
+                    <a class="breadcrumb" v-if="page == 'gestion'">Gestion</a>
+                </div>
+                <ul class="right hide-on-med-and-down">
+                    <li v-if="connecte">
+                        <a class="dropdown-button" data-activates="menuUtilisateur">
+                            <i class="material-icons">perm_identity</i> {{ login }} (<i class="material-icons">timer</i> {{ timer }})
+                        </a>
+                    </li>
+                    <li v-if="connecte && page == 'operations'">
+                        <a @click="page = 'gestion'">
+                            <i class="material-icons">settings</i> Gestion
+                        </a>
+                    </li>
+                    <li v-if="connecte && page == 'gestion'">
+                        <a @click="page = 'operations'">
+                            <i class="material-icons">play_arrow</i> Opérations
+                        </a>
+                    </li>
+                </ul>
             </div>
-            <ul class="right hide-on-med-and-down">
-                <li v-if="connecte">
-                    <a class="dropdown-button" data-activates="menuUtilisateur">
-                        <i class="material-icons">perm_identity</i> {{ login }} (<i class="material-icons">timer</i> {{ timer }})
-                    </a>
-                </li>
-                <li v-if="connecte && page == 'operations'">
-                    <a @click="page = 'gestion'">
-                        <i class="material-icons">settings</i> Gestion
-                    </a>
-                </li>
-                <li v-if="connecte && page == 'gestion'">
-                    <a @click="page = 'operations'">
-                        <i class="material-icons">play_arrow</i> Opérations
-                    </a>
-                </li>
-            </ul>
-            <ul class="tabs" v-show="page == 'operations'">
-                <li class="tab col s3"><a href="#creation">Création</a></li>
-                <li class="tab col s3"><a href="#rechargement">Rechargement</a></li>
-                <li class="tab col s3"><a class="active" href="#paiement">Paiement</a></li>
-                <li class="tab col s3"><a href="#vidange">Vidange</a></li>
-            </ul>
-            <ul class="tabs" v-show="page == 'gestion'">
-                <li class="tab col s3"><a href="#clients">Clients</a></li>
-                <li class="tab col s3"><a href="#transactions">Transactions</a></li>
-                <li class="tab col s3"><a href="#utilisateurs">Utilisateurs</a></li>
-                <li class="tab col s3"><a href="#statistiques">Statistiques</a></li>
-            </ul>
+            <div>
+                <ul class="tabs" v-show="page == 'operations'">
+                    <li class="tab col s3"><a href="#creation">Création</a></li>
+                    <li class="tab col s3"><a href="#rechargement">Rechargement</a></li>
+                    <li class="tab col s3"><a class="active" href="#paiement">Paiement</a></li>
+                    <li class="tab col s3"><a href="#vidange">Vidange</a></li>
+                </ul>
+                <ul class="tabs" v-show="page == 'gestion'">
+                    <li class="tab col s3"><a href="#clients">Clients</a></li>
+                    <li class="tab col s3"><a href="#transactions">Transactions</a></li>
+                    <li class="tab col s3"><a href="#utilisateurs">Utilisateurs</a></li>
+                    <li class="tab col s3"><a href="#statistiques">Statistiques</a></li>
+                </ul>
+            </div>
             <ul class="side-nav">
                 <li><a>TODO</a></li>
             </ul>
@@ -133,7 +137,7 @@
                             <input type="number" name="solde" v-model="solde">
                             <label for="solde">Solde initial (€)</label>
                         </div>
-                        <div class="input-field" v-if="droit >= 3">
+                        <div class="row" v-if="droit >= 3">
                             <strong>Découvert autorisé</strong>
                             <div class="switch">
                                 <label>

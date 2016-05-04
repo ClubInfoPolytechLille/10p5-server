@@ -55,6 +55,19 @@ nav i.material-icons {
     font-size: 1rem;
 }
 
+// Simplification du HTML
+
+nav>div {
+    @extend .nav-wrapper;
+    @extend .container;
+    >div {
+        @extend .row;
+        margin-bottom: 0px;
+    }
+
+}
+
+
 // Stylisation de tous les boutons
 button {
     @extend .btn-large;
@@ -75,21 +88,7 @@ form {
     }
 }
 
-.collapsible-body {
-    padding: 20px;
-
-}
-
-// On met les toasts en bas
-#toast-container {
-    top: inherit;
-    bottom: 10%;
-
-    a {
-        text-transform: uppercase;
-    }
-}
-
+// Personalisé
 #grilleBieres {
     >div {
         @extend .row;
@@ -103,6 +102,21 @@ form {
                 font-size: 3em;
             }
         }
+    }
+}
+
+.collapsible-body {
+    padding: 20px;
+}
+
+
+// On met les toasts en bas
+#toast-container {
+    top: inherit;
+    bottom: 10%;
+
+    a {
+        text-transform: uppercase;
     }
 }
 
