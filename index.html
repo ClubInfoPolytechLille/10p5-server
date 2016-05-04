@@ -56,11 +56,22 @@
             <div class="left" v-else>
                 <a class="breadcrumb">10⁵</a>
                 <a class="breadcrumb" v-if="page == 'operations'">Opérations</a>
+                <a class="breadcrumb" v-if="page == 'gestion'">Gestion</a>
             </div>
             <ul class="right hide-on-med-and-down">
                 <li v-if="connecte">
                     <a class="dropdown-button" data-activates="menuUtilisateur">
                         <i class="material-icons">perm_identity</i> {{ login }} (<i class="material-icons">timer</i> {{ timer }})
+                    </a>
+                </li>
+                <li v-if="connecte && page == 'operations'">
+                    <a @click="page = 'gestion'">
+                        <i class="material-icons">settings</i> Gestion
+                    </a>
+                </li>
+                <li v-if="connecte && page == 'gestion'">
+                    <a @click="page = 'operations'">
+                        <i class="material-icons">play_arrow</i> Opérations
                     </a>
                 </li>
             </ul>
@@ -69,6 +80,12 @@
                 <li class="tab col s3"><a href="#rechargement">Rechargement</a></li>
                 <li class="tab col s3"><a class="active" href="#paiement">Paiement</a></li>
                 <li class="tab col s3"><a href="#vidange">Vidange</a></li>
+            </ul>
+            <ul class="tabs" v-show="page == 'gestion'">
+                <li class="tab col s3"><a href="#clients">Clients</a></li>
+                <li class="tab col s3"><a href="#transactions">Transactions</a></li>
+                <li class="tab col s3"><a href="#utilisateurs">Utilisateurs</a></li>
+                <li class="tab col s3"><a href="#statistiques">Statistiques</a></li>
             </ul>
             <ul class="side-nav">
                 <li><a>TODO</a></li>
@@ -93,8 +110,8 @@
                         <label for="mdp">Mot de passe</label>
                     </div>
                     <button :disabled="!login || !mdp">Se connecter</button>
+                </form>
             </div>
-            </form>
         </div>
         <div v-if="PEUT_NFC">
             <h5>Avec votre carte étudiant</h5>
@@ -102,7 +119,7 @@
         </div>
 
         <div class="container" v-show="page == 'operations'">
-            <div class="row center">
+            <div class="row">
                 <div id="creation">
                     <h4>Créer un nouveau client</h4>
                     <form @submit="creer">
@@ -175,6 +192,63 @@
                 </div>
             </div>
         </div>
+
+        <div class="container" v-show="page == 'gestion'">
+            <div class="row">
+                <div id="clients">
+                    <h4>Liste des clients</h4>
+                </div>
+                <div id="transactions">
+                    <h4>Liste des transactions</h4>
+                    <button @click="actuTransactions">Rafraîchir</button>
+                    <ul class="collapsible popout" data-collapsible="accordion">
+                        <li v-for="transaction in transactions">
+                            <div class="collapsible-header" :class="{'red': !transaction.valide}">
+                                <span v-if="transaction.type == 1">
+                                    <i class="material-icons">trending_flat</i> {{ transaction.client }} : {{ transaction.montant }} €
+                                </span>
+                                <span v-if="transaction.type == 2">
+                                    <i class="material-icons">trending_up</i> {{ transaction.client }} : + {{ transaction.montant }} €
+                                </span>
+                                <span v-if="transaction.type == 3">
+                                    <i class="material-icons">trending_down</i> {{ transaction.client }} : - {{ transaction.montant }} €
+                                    <span v-if="transaction.quantite != 0">({{ transaction.quantite }} consommation<span v-if="transaction.quantite >= 2">s</span>)</span>
+                                </span>
+                                <span v-if="transaction.type == 4">
+                                    <i class="material-icons">delete</i> {{ transaction.client }} : - {{ transaction.montant }} €
+                                </span>
+                            </div>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li>
+                                        <strong>Type :</strong>
+                                        <span v-if="transaction.type == 1">Création</span>
+                                        <span v-if="transaction.type == 2">Rechargement</span>
+                                        <span v-if="transaction.type == 3">Date</span>
+                                        <span v-if="transaction.type == 4">Vidange</span>
+                                    </li>
+                                    <li>
+                                        <strong>Date :</strong> {{ transaction.date }}
+                                    </li>
+                                    <li>
+                                        <strong>Utilisateur :</strong> {{ transaction.utilisateur }}
+                                    </li>
+                                </ul>
+                                <button @click="annuler(transaction.id)" :disabled="!transaction.valide">Annuler</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div id="utilisateurs">
+                    <h4>Liste des utilisateurs</h4>
+                </div>
+                <div id="statistiques">
+                    <h4>Statistiques</h4>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 
     <footer class="page-footer">

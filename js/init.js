@@ -33,6 +33,7 @@ var app = new Vue({
         // Session
         connecte: false,
         date: 1,
+        transactions: [],
     },
     methods: {
         // API
@@ -45,6 +46,22 @@ var app = new Vue({
             donnees['jeton'] = this.jeton
             this.apiBrute(chemin, donnees, cb)
         },
+        actuTransactions: function() {
+            var that = this
+            this.api("transactions", {}, function(retour, donnees) {
+                switch(retour) {
+                    case "ok":
+                        console.log(donnees.transactions[0].type, TRANSACTION_CREATION)
+                        that.transactions = donnees.transactions
+                        break;
+
+                    default:
+                        that.erreur(retour, donnees);
+                        break;
+                }
+            })
+
+        },
         // Affichage
         toast: function(texte) {
             Materialize.toast(texte, 4000);
@@ -54,7 +71,7 @@ var app = new Vue({
             this.erreurMessage = donnees['message']
             $("#modalErreur").openModal();
         },
-        annuler(id) {
+        annuler: function(id) {
             var that = this
             this.api("annuler", {idTransaction: id}, function(retour, donnees) {
                 switch(retour) {
@@ -68,7 +85,7 @@ var app = new Vue({
                 }
             });
         },
-        transaction(id, texte) {
+        transaction: function(id, texte) {
             var that = this
             var interieur = $('<span>').text(texte + ' ').append($('<a>').text('Annuler').one('click', function() {
                 that.annuler(id)
@@ -170,20 +187,12 @@ var app = new Vue({
     },
 })
 
+Vue.filter('date', function(timestamp) {
+    return Date(timestamp).toLocaleString();
+})
+
 setInterval(function actualiserDate() {
     app.$data.date = Math.floor(Date.now()/1000)
 }, 1000);
 
-
-// Placeholder
-function vendu() {
-    var interieur = $("<span>").text("Vendu 1 bière à KAE1EET2YI (15,30 € → 13,50 €) ").append(
-            $("<a>").attr("href", "#!").text("Annuler")
-        );
-    Materialize.toast(interieur, 4000);
-}
-
-function soldeInsuffisant() {
-    $("#soldeInsuffisant").openModal();
-}
 
