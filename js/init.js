@@ -12,10 +12,13 @@ var TRANSACTION_DUREE = 60
 var PEUT_NFC = false
 
 // Préparation de l'interactivité
+function desactiverForms() {
+    $('form').submit(function() { return false });
+}
 $(function(){
     $('.button-collapse').sideNav();
     $('.modal-trigger').leanModal()
-    $('form').submit(function() { return false });
+    desactiverForms()
     $('[name=idCarte]').characterCounter();
 });
 
@@ -39,6 +42,7 @@ var app = new Vue({
         // Données
         clients: [],
         transactions: [],
+        utilisateurs: [],
     },
     methods: {
         // API
@@ -84,6 +88,20 @@ var app = new Vue({
                 }
             })
         },
+        actuUtilisateurs: function() {
+            var that = this
+            this.api("utilisateur/liste", {}, function(retour, donnees) {
+                switch(retour) {
+                    case "ok":
+                        that.utilisateurs = donnees.utilisateurs
+                        break;
+
+                    default:
+                        that.erreur(retour, donnees);
+                        break;
+                }
+            })
+        },
 
         // Affichage
         toast: function(texte) {
@@ -120,15 +138,57 @@ var app = new Vue({
             }))
             that.toast(interieur);
         },
-        decouvert: function(idCarte, decouvert, e) {
+        c_decouvert: function(client, e) {
             var that = this
             // Hack pour récupérer la vraie valeur (decouvert peut mais pas obligatoirement avoir la bonne valeur tel qu'implémenté dans le HTML actuellmenent)
             if (typeof(e) == 'object') {
-                decouvert = $(e.target).is(':checked')
+                client.decouvert = $(e.target).is(':checked')
             }
-            this.api("client/decouvert", {idCarte: idCarte, decouvert: decouvert}, function(retour, donnees) {
+            this.api("client/decouvert", {idCarte: client.idCarte, decouvert: client.decouvert}, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
+                        break;
+
+                    default:
+                        that.erreur(retour, donnees);
+                        break;
+                }
+            });
+        },
+        u_mdp: function(utilisateur) {
+            var that = this
+            this.api("utilisateur/mdp", {login: utilisateur.login, mdp: utilisateur.mdp}, function(retour, donnees) {
+                switch(retour) {
+                    case "ok":
+                        that.toast(utilisateur.login + " : mot de passe changé")
+                        break;
+
+                    default:
+                        that.erreur(retour, donnees);
+                        break;
+                }
+            });
+        },
+        u_droit: function(utilisateur) {
+            var that = this
+            this.api("utilisateur/droit", {login: utilisateur.login, droit: utilisateur.droit}, function(retour, donnees) {
+                switch(retour) {
+                    case "ok":
+                        that.toast(utilisateur.login + " : droit changé")
+                        break;
+
+                    default:
+                        that.erreur(retour, donnees);
+                        break;
+                }
+            });
+        },
+        u_carte: function(utilisateur) {
+            var that = this
+            this.api("utilisateur/carte", {login: utilisateur.login, idCarte: utilisateur.idCarte}, function(retour, donnees) {
+                switch(retour) {
+                    case "ok":
+                        that.toast(utilisateur.login + " : carte changée")
                         break;
 
                     default:
@@ -231,6 +291,14 @@ var app = new Vue({
             return  minutes + ':' + (secondes < 10 ? '0' : '') + secondes
         }
     },
+    components: {
+        'todo': Vue.extend({template: '<div class="chip green"> Prochainement </div>'}),
+    },
+    watch: {
+        utilisateurs: function() {
+            desactiverForms()
+        }
+    }
 })
 
 Vue.filter('date', function(timestamp) {

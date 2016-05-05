@@ -92,7 +92,7 @@
                 </ul>
             </div>
             <ul class="side-nav">
-                <li><a>TODO</a></li>
+                <todo></todo>
             </ul>
         </div>
     </nav>
@@ -225,7 +225,7 @@
                                         <div class="switch">
                                             <label>
                                                 Non
-                                                <input v-model="client.decouvert" type="checkbox" @click="decouvert(client.idCarte, client.decouvert, $event)">
+                                                <input v-model="client.decouvert" type="checkbox" @click="c_decouvert(client, $event)">
                                                 <span class="lever"></span>
                                                 Oui
                                             </label>
@@ -233,7 +233,7 @@
                                     </li>
                                 </ul>
                                 <h5>Transactions</h5>
-                                <p>TODO</p>
+                                <todo></todo>
                             </div>
                         </li>
                     </ul>
@@ -281,9 +281,60 @@
                 </div>
                 <div id="utilisateurs">
                     <h4>Liste des utilisateurs</h4>
+                    <button @click="actuUtilisateurs">Rafraîchir</button>
+                    <ul class="collapsible popout" data-collapsible="accordion">
+                        <li v-for="utilisateur in utilisateurs">
+                            <div class="collapsible-header">
+                                <i class="material-icons" v-if="utilisateur.droit == 1">assignment_ind</i>
+                                <i class="material-icons" v-if="utilisateur.droit == 2">perm_identity</i>
+                                <i class="material-icons" v-if="utilisateur.droit == 3">supervisor_account</i>
+                                {{ utilisateur.login }}
+                            </div>
+                            <div class="collapsible-body">
+                                <h5>Changer de droit</h5>
+                                <form @change="u_droit(utilisateur)">
+                                    <p>
+                                        <input :name="'droit_' + utilisateur.login" type="radio" :id="'droit_' + utilisateur.login + '_1'" v-model="utilisateur.droit" value="1"/>
+                                        <label :for="'droit_' + utilisateur.login + '_1'">BDE</label>
+                                    </p>
+                                    <p>
+                                        <input :name="'droit_' + utilisateur.login" type="radio" :id="'droit_' + utilisateur.login + '_2'" v-model="utilisateur.droit" value="2"/>
+                                        <label :for="'droit_' + utilisateur.login + '_2'">Bar</label>
+                                    </p>
+                                    <p>
+                                        <input :name="'droit_' + utilisateur.login" type="radio" :id="'droit_' + utilisateur.login + '_3'" v-model="utilisateur.droit" value="3"/>
+                                        <label :for="'droit_' + utilisateur.login + '_3'">Président</label>
+                                    </p>
+                                </form>
+                                <h5>Changer de mot de passe</h5>
+                                <form @submit="u_mdp(utilisateur)">
+                                    <div class="input-field">
+                                        <i class="material-icons prefix">vpn_key</i>
+                                        <input type="password" name="mdp" v-model="utilisateur.mdp">
+                                        <label for="utilisateur.mdp">Mot de passe</label>
+                                    </div>
+                                    <button :disabled="!utilisateur.mdp">Changer de mot de passe</button>
+                                </form>
+                                <h5> Changer de carte </h5>
+                                <form @submit="u_carte(utilisateur)">
+                                    <div class="input-field">
+                                        <i class="material-icons prefix">credit_card</i>
+                                        <input type="text" name="carte" length="8" v-model="utilisateur.idCarte" >
+                                        <label for="utilisateur.idCarte">Carte</label>
+                                    </div>
+                                    <button :disabled="!utilisateur.idCarte">Changer de carte</button>
+                                </form>
+
+                                <h5>Transactions</h5>
+                                <todo></todo>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
                 </div>
                 <div id="statistiques">
                     <h4>Statistiques</h4>
+                    <todo></todo>
                 </div>
             </div>
         </div>

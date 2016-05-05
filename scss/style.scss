@@ -27,6 +27,7 @@ $tabs-bg-color: $primary-color !default;
 
 // Permet le footer de se mettre toujours en bas
 body {
+    overflow-y: scroll; // Toujours afficher la barre de défilment pour éviter les sautements
     display: flex;
     min-height: 100vh;
     flex-direction: column;
@@ -107,6 +108,9 @@ form {
 
 .collapsible-body {
     padding: 20px;
+    p {
+        padding: inherit;
+    }
 }
 
 
