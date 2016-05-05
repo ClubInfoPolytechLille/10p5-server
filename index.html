@@ -225,7 +225,7 @@
                                         <div class="switch">
                                             <label>
                                                 Non
-                                                <input v-model="client.decouvert" type="checkbox">
+                                                <input v-model="client.decouvert" type="checkbox" @click="decouvert(client.idCarte, client.decouvert, $event)">
                                                 <span class="lever"></span>
                                                 Oui
                                             </label>

@@ -43,8 +43,13 @@ var app = new Vue({
     methods: {
         // API
         apiBrute: function(chemin, donnees, cb) {
-            $.post('api/' + chemin, donnees, function(data) {
+            $('body').css('opacity', 0.7)
+            $.post('api/' + chemin, donnees).done(function(data) {
                 cb(data['status'], data);
+            }).error(function() {
+                cb('erreur_communication', {});
+            }).always(function() {
+                $('body').css('opacity', 1)
             })
         },
         api: function(chemin, donnees, cb) {
@@ -86,7 +91,7 @@ var app = new Vue({
         },
         erreur: function(retour, donnees) {
             this.erreurTitre = retour
-            this.erreurMessage = donnees['message']
+            this.erreurMessage = donnees.message
             $("#modalErreur").openModal();
         },
         annuler: function(id) {
@@ -94,6 +99,11 @@ var app = new Vue({
             this.api("annuler", {idTransaction: id}, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
+                        for (transaction of that.transactions) {
+                            if (transaction.id == id) {
+                                transaction.valide = 0
+                            }
+                        }
                         that.toast("Client " + donnees.client + " : " + donnees.soldeAncien + " → " + donnees.soldeNouveau)
                         break;
 
@@ -110,6 +120,24 @@ var app = new Vue({
             }))
             that.toast(interieur);
         },
+        decouvert: function(idCarte, decouvert, e) {
+            var that = this
+            // Hack pour récupérer la vraie valeur (decouvert peut mais pas obligatoirement avoir la bonne valeur tel qu'implémenté dans le HTML actuellmenent)
+            if (typeof(e) == 'object') {
+                decouvert = $(e.target).is(':checked')
+            }
+            this.api("client/decouvert", {idCarte: idCarte, decouvert: decouvert}, function(retour, donnees) {
+                switch(retour) {
+                    case "ok":
+                        break;
+
+                    default:
+                        that.erreur(retour, donnees);
+                        break;
+                }
+            });
+        },
+
         // Fonctionnement
         connecter: function() {
             var that = this;
