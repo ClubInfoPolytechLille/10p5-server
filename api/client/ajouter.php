@@ -38,6 +38,6 @@ $requete->close();
 $idTransaction = transaction(TRANSACTION_CREATION, $_POST["idCarte"], $solde);
 
 
-retour("ok", ["idTransaction" => $idTransaction]);
+retour("ok", ["idTransaction" => $idTransaction, "soldeNouveau" => $solde]);
 
 ?>
