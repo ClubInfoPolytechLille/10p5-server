@@ -319,6 +319,9 @@
                     </ul>
                 </div>
                 <div id="utilisateurs">
+                    <h4>{{ moi.login }}</h4>
+                    <umodifier :utilisateur="moi"></umodifier>
+
                     <h4>Liste des utilisateurs</h4>
                     <button @click="actuUtilisateurs">Rafraîchir</button>
                     <ul class="collapsible popout" data-collapsible="accordion">
@@ -329,39 +332,7 @@
                                 <i class="material-icons" v-if="utilisateur.droit == 3">supervisor_account</i> {{ utilisateur.login }}
                             </div>
                             <div class="collapsible-body">
-                                <h5>Changer de droit</h5>
-                                <form @change="u_droit(utilisateur)">
-                                    <p>
-                                        <input :name="'droit_' + utilisateur.login" type="radio" :id="'droit_' + utilisateur.login + '_1'" v-model="utilisateur.droit" value="1" />
-                                        <label :for="'droit_' + utilisateur.login + '_1'">BDE</label>
-                                    </p>
-                                    <p>
-                                        <input :name="'droit_' + utilisateur.login" type="radio" :id="'droit_' + utilisateur.login + '_2'" v-model="utilisateur.droit" value="2" />
-                                        <label :for="'droit_' + utilisateur.login + '_2'">Bar</label>
-                                    </p>
-                                    <p>
-                                        <input :name="'droit_' + utilisateur.login" type="radio" :id="'droit_' + utilisateur.login + '_3'" v-model="utilisateur.droit" value="3" />
-                                        <label :for="'droit_' + utilisateur.login + '_3'">Président</label>
-                                    </p>
-                                </form>
-                                <h5>Changer de mot de passe</h5>
-                                <form @submit="u_mdp(utilisateur)">
-                                    <div class="input-field">
-                                        <i class="material-icons prefix">vpn_key</i>
-                                        <input type="password" name="mdp" v-model="utilisateur.mdp" length="72">
-                                        <label for="utilisateur.mdp">Mot de passe</label>
-                                    </div>
-                                    <button :disabled="!utilisateur.mdp">Changer de mot de passe</button>
-                                </form>
-                                <h5> Changer de carte </h5>
-                                <form @submit="u_carte(utilisateur)">
-                                    <div class="input-field">
-                                        <i class="material-icons prefix">credit_card</i>
-                                        <input type="text" name="carte" length="8" v-model="utilisateur.idCarte">
-                                        <label for="utilisateur.idCarte">Carte</label>
-                                    </div>
-                                    <button :disabled="!utilisateur.idCarte">Changer de carte</button>
-                                </form>
+                                <umodifier :utilisateur="utilisateur"></umodifier>
 
                                 <h5>Transactions</h5>
                                 <todo></todo>
@@ -393,11 +364,52 @@
         </div>
     </footer>
 
+    <!-- Modèles -->
+    <script type="text/template" id="todo">
+        <div class="chip green">
+            Prochainement
+        </div>
+    </script>
+    <script type="text/template" id="u_modifier">
+        <h5>Changer de droit</h5>
+        <form @change="u_droit(utilisateur)">
+            <p>
+                <input :name="'droit_' + utilisateur.login" type="radio" :id="'droit_' + utilisateur.login + '_1'" v-model="utilisateur.droit" value="1" :disabled="moi.droit < 3"/>
+                <label :for="'droit_' + utilisateur.login + '_1'">BDE</label>
+            </p>
+            <p>
+                <input :name="'droit_' + utilisateur.login" type="radio" :id="'droit_' + utilisateur.login + '_2'" v-model="utilisateur.droit" value="2" :disabled="moi.droit < 3"/>
+                <label :for="'droit_' + utilisateur.login + '_2'">Bar</label>
+            </p>
+            <p>
+                <input :name="'droit_' + utilisateur.login" type="radio" :id="'droit_' + utilisateur.login + '_3'" v-model="utilisateur.droit" value="3" :disabled="moi.droit < 3"/>
+                <label :for="'droit_' + utilisateur.login + '_3'">Président</label>
+            </p>
+        </form>
+        <h5>Changer de mot de passe</h5>
+        <form @submit="u_mdp(utilisateur)">
+            <div class="input-field">
+                <i class="material-icons prefix">vpn_key</i>
+                <input type="password" name="mdp" v-model="utilisateur.mdp" length="72">
+                <label for="utilisateur.mdp">Mot de passe</label>
+            </div>
+            <button :disabled="!utilisateur.mdp">Changer de mot de passe</button>
+        </form>
+        <h5> Changer de carte </h5>
+        <form @submit="u_carte(utilisateur)">
+            <div class="input-field">
+                <i class="material-icons prefix">credit_card</i>
+                <input type="text" name="carte" length="8" v-model="utilisateur.idCarte">
+                <label for="utilisateur.idCarte">Carte</label>
+            </div>
+            <button :disabled="!utilisateur.idCarte">Changer de carte</button>
+        </form>
+    </script>
 
     <!--  Scripts-->
     <script src="lib/jquery/dist/jquery.min.js"></script>
     <script src="lib/Materialize/dist/js/materialize.min.js"></script>
-    <script src="lib/vue/dist/vue.min.js"></script>
+    <script src="lib/vue/dist/vue.js"></script>
     <script src="js/init.js"></script>
 
 </body>

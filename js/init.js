@@ -39,11 +39,18 @@ var app = new Vue({
         jeton: '',
         connecte: false,
         date: 1,
+        // Champs (à remplacer par des objets)
+        mdp: '',
+        idCarte: '',
+        solde: 0,
+        credit: 0,
+        prix: 0,
+        moi: {},
+        u_nouveau: {},
         // Données
         clients: [],
         transactions: [],
         utilisateurs: [],
-        u_nouveau: {},
     },
     methods: {
         // API
@@ -223,10 +230,13 @@ var app = new Vue({
                 that.mdp = ''
                 switch(retour) {
                     case "ok":
+                        // TODO Virer les variables non-objet globales
                         that.login = donnees.login
                         that.droit = donnees.droit
                         that.jeton = donnees.jeton
                         that.connecte = that.date
+
+                        that.moi = {login: donnees.login, droit: donnees.droit, jeton: donnees.jeton, connecte: that.date}
                         that.toast("Correctement identifié en tant que " + that.login + " pour " + JETON_DUREE/60+ " minutes")
                         that.page = 'operations'
                         break;
@@ -310,7 +320,22 @@ var app = new Vue({
         }
     },
     components: {
-        'todo': Vue.extend({template: '<div class="chip green"> Prochainement </div>'}),
+        'todo': Vue.extend({
+            template: $('#todo').html(),
+        }),
+        'umodifier': Vue.extend({
+            props: ['utilisateur'],
+            template: $('#u_modifier').html(),
+            methods: { // TODO Pas bien
+                u_droit: function(data) { return this.$parent.u_droit(data) },
+                u_mdp: function(data) { return this.$parent.u_mdp(data) },
+                u_carte: function(data) { return this.$parent.u_carte(data) },
+            },
+            computed: {
+                moi: function() { return this.$parent.moi },
+            },
+        }),
+
     },
     watch: {
         utilisateurs: function() {
@@ -319,10 +344,12 @@ var app = new Vue({
     }
 })
 
+// Filtres
 Vue.filter('date', function(timestamp) {
     return Date(timestamp).toLocaleString();
 })
 
+// Actualisation du timer
 setInterval(function actualiserDate() {
     app.$data.date = Math.floor(Date.now()/1000)
 }, 1000);
