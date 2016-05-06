@@ -248,6 +248,22 @@ var app = new Vue({
             })
             return false
         },
+        deconnecter: function() {
+            var that = this;
+            this.api("utilisateur/deconnexion", {} , function(retour, donnees) {
+                switch(retour) {
+                    case "ok":
+                        that.moi = {}
+                        that.page = 'connexion'
+                        break;
+
+                    default:
+                        that.erreur(retour, donnees);
+                        break;
+                }
+            })
+            return false
+        },
         creer: function() {
             var that = this
             this.api("client/ajouter", {idCarte: this.idCarte, solde: this.solde, decouvert: this.decouvert}, function(retour, donnees) {
@@ -314,6 +330,9 @@ var app = new Vue({
     computed: {
         timer: function() {
             var secondes = this.connecte + JETON_DUREE - this.date
+            if (secondes <= 0) {
+                this.deconnecter()
+            }
             var minutes = Math.floor(secondes/60)
             var secondes = secondes % 60
             return  minutes + ':' + (secondes < 10 ? '0' : '') + secondes

@@ -38,6 +38,7 @@ function donne($parametre) { // Vérifie si le paramètre est donné
 }
 
 function supprimerJeton($jeton) {
+    global $db;
     $requete = $db->prepare("DELETE FROM Sessions WHERE jeton=?");
     if (!$requete) {
         retour("erreur_bdd_preparee", ["message" => $db->error]);
