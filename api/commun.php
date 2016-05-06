@@ -9,7 +9,7 @@ header('Content-type: application/json'); // Histoire de faire comprendre au cli
 // Définition des constantes
 
 define("JETON_TAILLE", 30); // Taille d'un jeton
-define("JETON_DUREE", 10*60); // Temps de validité du jeton en secondes
+define("JETON_DUREE", 5*60); // Temps de validité du jeton en secondes
 
 define("TRANSACTION_CREATION", 1);
 define("TRANSACTION_RECHARGEMENT", 2);
@@ -68,6 +68,17 @@ function verifierJeton($jeton) {
         }
     } else {
         retour("jeton_invalide");
+    }
+    $requete->close();
+
+    // Augmentation du timer
+    $requete = $db->prepare("UPDATE Sessions SET date=CURRENT_TIME WHERE jeton=?");
+    if (!$requete) {
+        retour("erreur_bdd_preparee", ["message" => $db->error]);
+    }
+    $requete->bind_param("s", $jeton);
+    if (!$requete->execute()) {
+        retour("erreur_bdd", ["message" => $requete->error]);
     }
     $requete->close();
 }

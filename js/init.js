@@ -1,6 +1,6 @@
 // Constantes
 var JETON_TAILLE = 30 // Taille d'un jeton
-var JETON_DUREE = 10*60 // Temps de validité du jeton en secondes
+var JETON_DUREE = 5*60 // Temps de validité du jeton en secondes
 
 var TRANSACTION_CREATION = 1
 var TRANSACTION_RECHARGEMENT = 2
@@ -65,8 +65,12 @@ var app = new Vue({
             })
         },
         api: function(chemin, donnees, cb) {
+            var that = this
             donnees['jeton'] = this.jeton
-            this.apiBrute(chemin, donnees, cb)
+            this.apiBrute(chemin, donnees, function(retour, donnees) {
+                that.moi.connecte = that.date
+                cb(retour, donnees)
+            })
         },
         actuClients: function() {
             var that = this
@@ -329,7 +333,7 @@ var app = new Vue({
     },
     computed: {
         timer: function() {
-            var secondes = this.connecte + JETON_DUREE - this.date
+            var secondes = this.moi.connecte + JETON_DUREE - this.date
             if (secondes <= 0) {
                 this.deconnecter()
             }
