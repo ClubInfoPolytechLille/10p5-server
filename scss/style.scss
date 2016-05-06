@@ -106,7 +106,7 @@ form {
     }
 }
 
-// Personalisé
+// Personalisation
 #grilleBieres {
     >div {
         @extend .row;
@@ -130,6 +130,10 @@ form {
     }
 }
 
+
+.footer-copyright a {
+    color: white;
+}
 
 // On met les toasts en bas
 #toast-container {

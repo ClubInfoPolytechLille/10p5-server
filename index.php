@@ -380,7 +380,7 @@
     <footer class="page-footer">
         <div class="footer-copyright">
             <div class="container">
-                10p5 v0.0.0 - © Copyright 2016, <a href="http://clubinfo.plil.net">Le Club Info Polytech Lille</a>
+            10p5 <?php echo exec("git describe --tags --dirty"); ?> © Copyright 2016, <a href="http://clubinfo.plil.net">Le Club Info Polytech Lille</a>
             </div>
         </div>
     </footer>
