@@ -83,6 +83,6 @@ if (!$requete->execute()) {
 }
 $requete->close();
 
-retour("ok", ["client" => $client, "soldeAncien" => $soldeAncien, "soldeNouveau" => $soldeNouveau]);
+retour("ok", ["client" => $client, "soldeAncien" => $soldeAncien, "soldeNouveau" => $soldeNouveau, "idTransaction" => $_POST['idTransaction']]);
 
 ?>
