@@ -48,9 +48,48 @@
             <a class="modal-action modal-close waves-effect waves-red btn-flat">Annuler</a>
         </div>
     </div>
+    <div id="u_ajouter" class="modal">
+        <form @submit="u_ajouter(u_nouveau)">
+            <div class="modal-content">
+                <h4>Ajouter un utilisateur</h4>
+                <div class="input-field">
+                    <i class="material-icons prefix">perm_identity</i>
+                    <input type="text" name="login" v-model="u_nouveau.login" length="30">
+                    <label for="u_nouveau.login">Login</label>
+                </div>
+                <p>
+                    <input name="droit_nouveau" type="radio" id="droit_nouveau_1" v-model="u_nouveau.droit" value="1" />
+                    <label for="droit_nouveau_1">BDE</label>
+                </p>
+                <p>
+                    <input name="droit_nouveau" type="radio" id="droit_nouveau_2" v-model="u_nouveau.droit" value="2" />
+                    <label for="droit_nouveau_2">Bar</label>
+                </p>
+                <p>
+                    <input name="droit_nouveau" type="radio" id="droit_nouveau_3" v-model="u_nouveau.droit" value="3" />
+                    <label for="droit_nouveau_3">Président</label>
+                </p>
+                <div class="input-field">
+                    <i class="material-icons prefix">vpn_key</i>
+                    <input type="password" name="mdp" v-model="u_nouveau.mdp" length="72">
+                    <label for="u_nouveau.mdp">Mot de passe</label>
+                </div>
+                <div class="input-field">
+                    <i class="material-icons prefix">credit_card</i>
+                    <input type="text" name="carte" length="8" v-model="u_nouveau.idCarte">
+                    <label for="carte">Carte</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="modal-action modal-close waves-green" :disabled="!u_nouveau.login || !u_nouveau.droit || !u_nouveau.mdp">Créer</button>
+                <button type="reset" class="modal-action modal-close waves-red">Annuler</button>
+            </div>
+        </form>
+    </div>
 
     <!-- Page -->
     <nav role="navigation">
+
         <div>
             <div>
                 <a class="brand-logo" v-if="page == 'connexion'">10⁵</a>
@@ -287,22 +326,21 @@
                             <div class="collapsible-header">
                                 <i class="material-icons" v-if="utilisateur.droit == 1">assignment_ind</i>
                                 <i class="material-icons" v-if="utilisateur.droit == 2">perm_identity</i>
-                                <i class="material-icons" v-if="utilisateur.droit == 3">supervisor_account</i>
-                                {{ utilisateur.login }}
+                                <i class="material-icons" v-if="utilisateur.droit == 3">supervisor_account</i> {{ utilisateur.login }}
                             </div>
                             <div class="collapsible-body">
                                 <h5>Changer de droit</h5>
                                 <form @change="u_droit(utilisateur)">
                                     <p>
-                                        <input :name="'droit_' + utilisateur.login" type="radio" :id="'droit_' + utilisateur.login + '_1'" v-model="utilisateur.droit" value="1"/>
+                                        <input :name="'droit_' + utilisateur.login" type="radio" :id="'droit_' + utilisateur.login + '_1'" v-model="utilisateur.droit" value="1" />
                                         <label :for="'droit_' + utilisateur.login + '_1'">BDE</label>
                                     </p>
                                     <p>
-                                        <input :name="'droit_' + utilisateur.login" type="radio" :id="'droit_' + utilisateur.login + '_2'" v-model="utilisateur.droit" value="2"/>
+                                        <input :name="'droit_' + utilisateur.login" type="radio" :id="'droit_' + utilisateur.login + '_2'" v-model="utilisateur.droit" value="2" />
                                         <label :for="'droit_' + utilisateur.login + '_2'">Bar</label>
                                     </p>
                                     <p>
-                                        <input :name="'droit_' + utilisateur.login" type="radio" :id="'droit_' + utilisateur.login + '_3'" v-model="utilisateur.droit" value="3"/>
+                                        <input :name="'droit_' + utilisateur.login" type="radio" :id="'droit_' + utilisateur.login + '_3'" v-model="utilisateur.droit" value="3" />
                                         <label :for="'droit_' + utilisateur.login + '_3'">Président</label>
                                     </p>
                                 </form>
@@ -310,7 +348,7 @@
                                 <form @submit="u_mdp(utilisateur)">
                                     <div class="input-field">
                                         <i class="material-icons prefix">vpn_key</i>
-                                        <input type="password" name="mdp" v-model="utilisateur.mdp">
+                                        <input type="password" name="mdp" v-model="utilisateur.mdp" length="72">
                                         <label for="utilisateur.mdp">Mot de passe</label>
                                     </div>
                                     <button :disabled="!utilisateur.mdp">Changer de mot de passe</button>
@@ -319,7 +357,7 @@
                                 <form @submit="u_carte(utilisateur)">
                                     <div class="input-field">
                                         <i class="material-icons prefix">credit_card</i>
-                                        <input type="text" name="carte" length="8" v-model="utilisateur.idCarte" >
+                                        <input type="text" name="carte" length="8" v-model="utilisateur.idCarte">
                                         <label for="utilisateur.idCarte">Carte</label>
                                     </div>
                                     <button :disabled="!utilisateur.idCarte">Changer de carte</button>
@@ -330,14 +368,19 @@
                             </div>
                         </li>
                     </ul>
-                </div>
-                </div>
-                <div id="statistiques">
-                    <h4>Statistiques</h4>
-                    <todo></todo>
+                    <div class="fixed-action-btn">
+                        <button @click="modal('u_ajouter')">
+                            <i class="large material-icons">add</i>
+                        </button>
+                    </div>
                 </div>
             </div>
+            <div id="statistiques">
+                <h4>Statistiques</h4>
+                <todo></todo>
+            </div>
         </div>
+    </div>
 
 
     </div>

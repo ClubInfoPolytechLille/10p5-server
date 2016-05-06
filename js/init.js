@@ -43,6 +43,7 @@ var app = new Vue({
         clients: [],
         transactions: [],
         utilisateurs: [],
+        u_nouveau: {},
     },
     methods: {
         // API
@@ -104,6 +105,9 @@ var app = new Vue({
         },
 
         // Affichage
+        modal: function(nom) {
+            $('#' + nom).openModal();
+        },
         toast: function(texte) {
             Materialize.toast(texte, 4000);
         },
@@ -147,6 +151,20 @@ var app = new Vue({
             this.api("client/decouvert", {idCarte: client.idCarte, decouvert: client.decouvert}, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
+                        break;
+
+                    default:
+                        that.erreur(retour, donnees);
+                        break;
+                }
+            });
+        },
+        u_ajouter: function(utilisateur) {
+            var that = this
+            this.api("utilisateur/ajouter", utilisateur, function(retour, donnees) {
+                switch(retour) {
+                    case "ok":
+                        that.toast("Utilisateur " + utilisateur.login + " ajouté")
                         break;
 
                     default:

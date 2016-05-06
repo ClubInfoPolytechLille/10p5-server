@@ -68,6 +68,12 @@ nav>div {
 
 }
 
+.modal-footer {
+    >a, >button {
+        @extend .waves-effect;
+        @extend .btn-flat;
+    }
+}
 
 // Stylisation de tous les boutons
 button {
@@ -78,6 +84,17 @@ button {
 
 button[disabled] {
     @extend .disabled;
+}
+
+.fixed-action-btn {
+    bottom: 75px;
+    right: 50px;
+    >button {
+        @extend .btn-floating;
+        @extend .btn-large;
+        @extend .indigo;
+    }
+
 }
 
 // Simplification des formulaires
