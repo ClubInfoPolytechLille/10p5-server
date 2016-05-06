@@ -51,6 +51,7 @@ var app = new Vue({
         clients: [],
         transactions: [],
         utilisateurs: [],
+        statistiques: {},
     },
     methods: {
         // API
@@ -114,6 +115,20 @@ var app = new Vue({
                 }
             })
         },
+        actuStatistiques: function() {
+            var that = this
+            this.api("statistiques", {}, function(retour, donnees) {
+                switch(retour) {
+                    case "ok":
+                        that.statistiques = donnees
+                        break;
+
+                    default:
+                        that.erreur(retour, donnees);
+                        break;
+                }
+            })
+        },
 
         // Affichage
         modal: function(nom) {
@@ -126,6 +141,12 @@ var app = new Vue({
             this.erreurTitre = retour
             this.erreurMessage = donnees.message
             $("#modalErreur").openModal();
+        },
+        changerPage: function(page, onglet) {
+            this.page = page
+            if (typeof(onglet) == 'string') {
+                $('ul.tabs').tabs('select_tab', onglet);
+            }
         },
         annuler: function(id) {
             var that = this
@@ -376,5 +397,4 @@ Vue.filter('date', function(timestamp) {
 setInterval(function actualiserDate() {
     app.$data.date = Math.floor(Date.now()/1000)
 }, 1000);
-
 
