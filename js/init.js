@@ -73,6 +73,24 @@ var app = new Vue({
                 cb(retour, donnees)
             })
         },
+        resetDonnees: function() {
+            this.login =  ''
+            this.droit =  ''
+            this.jeton =  ''
+            this.connecte =  false
+            this.date =  1
+            this.mdp =  ''
+            this.idCarte =  ''
+            this.solde =  ''
+            this.credit =  ''
+            this.prix =  ''
+            this.moi =  {}
+            this.u_nouveau =  {}
+            this.clients =  []
+            this.transactions =  []
+            this.utilisateurs =  []
+            this.statistiques =  {}
+        },
         actuClients: function() {
             var that = this
             this.api("client/liste", {}, function(retour, donnees) {
@@ -285,7 +303,7 @@ var app = new Vue({
             this.api("utilisateur/deconnexion", {} , function(retour, donnees) {
                 switch(retour) {
                     case "ok":
-                        that.moi = {}
+                        that.resetDonnees()
                         that.page = 'connexion'
                         break;
 
