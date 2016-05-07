@@ -173,7 +173,7 @@
                         </div>
                         <div class="input-field">
                             <i class="material-icons prefix">trending_flat</i>
-                            <input type="number" name="solde" v-model="solde">
+                            <input type="number" name="solde" v-model="solde" min="0.01" max="999.99" step="0.01">
                             <label for="solde">Solde initial (€)</label>
                         </div>
                         <div class="row" v-if="droit >= 3">
@@ -200,7 +200,7 @@
                         </div>
                         <div class="input-field">
                             <i class="material-icons prefix">trending_up</i>
-                            <input type="number" name="credit" v-model="credit">
+                            <input type="number" name="credit" v-model="credit" min="0.01" max="999.99" step="0.01">
                             <label for="credit">Crédit (€)</label>
                         </div>
                         <button type="submit" :disabled="!credit || (!PEUT_NFC && !idCarte)">Recharger</button>
@@ -227,7 +227,7 @@
                         </div>
                         <div class="input-field">
                             <i class="material-icons prefix">trending_down</i>
-                            <input type="number" name="prix" v-model="prix">
+                            <input type="number" name="prix" v-model="prix" min="0.01" max="999.99" step="0.01">
                             <label for="prix">Prix (€)</label>
                         </div>
                         <button type="submit" @click="payer" :disabled="!prix || (!PEUT_NFC && !idCarte)">Payer</button>
