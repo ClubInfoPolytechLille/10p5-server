@@ -72,7 +72,7 @@ function verifierJeton($jeton) {
     $requete->close();
 
     // Augmentation du timer
-    $requete = $db->prepare("UPDATE Sessions SET date=CURRENT_TIME WHERE jeton=?");
+    $requete = $db->prepare("UPDATE Sessions SET date=CURRENT_TIMESTAMP WHERE jeton=?");
     if (!$requete) {
         retour("erreur_bdd_preparee", ["message" => $db->error]);
     }
