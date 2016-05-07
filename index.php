@@ -100,7 +100,7 @@
                 </div>
                 <ul class="right hide-on-med-and-down">
                     <li v-if="moi.connecte">
-                        <a class="dropdown-button" @click="changerPage('gestion', 'utilisateurs')">
+                        <a class="dropdown-button" @click="deconnecter">
                             <i class="material-icons">perm_identity</i> {{ moi.login }} (<i class="material-icons">timer</i> {{ timer }})
                         </a>
                     </li>
