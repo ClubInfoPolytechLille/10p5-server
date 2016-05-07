@@ -14,18 +14,23 @@ if (!clientExiste(donne("idCarte"))) {
 
 if (donne("quantite")) {
     $quantite = intval($_POST["quantite"]);
-    $requete = $db->prepare("SELECT prix FROM Prix");
+    $requete = $db->prepare("SELECT prix FROM Prix WHERE produit=?");
     if (!$requete) {
         retour("erreur_bdd_preparee", ["message" => $db->error]);
     }
+    $produit = "biere" . $quantite;
+    $requete->bind_param("s", $produit);
     $requete->bind_result($prixItem);
     if (!$requete->execute()) {
         retour("erreur_bdd", ["message" => $requete->error]);
     }
-    $requete->fetch();
+    if (!$requete->fetch()) {
+        retour("produit_inconnu");
+    }
     $requete->close();
 
-    $montant = $prixItem * $quantite;
+    // $montant = $prixItem * $quantite;
+    $montant = $prixItem;
 } else {
     $montant = floatval($_POST["montant"]);
     $quantite = 0;
