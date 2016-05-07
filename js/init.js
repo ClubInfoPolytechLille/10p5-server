@@ -42,9 +42,9 @@ var app = new Vue({
         // Champs (à remplacer par des objets)
         mdp: '',
         idCarte: '',
-        solde: 0,
-        credit: 0,
-        prix: 0,
+        solde: '',
+        credit: '',
+        prix: '',
         moi: {},
         u_nouveau: {},
         // Données
@@ -301,6 +301,8 @@ var app = new Vue({
             this.api("client/ajouter", {idCarte: this.idCarte, solde: this.solde, decouvert: this.decouvert}, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
+                        that.idCarte = ''
+                        that.solde = ''
                         that.transaction(donnees.idTransaction, "Client " + that.idCarte + " crée avec un solde de " + that.solde + " €")
                         break;
 
@@ -315,6 +317,8 @@ var app = new Vue({
             this.api("client/recharger", {idCarte: this.idCarte, montant: this.credit}, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
+                        that.idCarte = ''
+                        that.credit = ''
                         that.transaction(donnees.idTransaction, "Client " + that.idCarte + " rechargé : " + donnees.soldeAncien + " + " + that.credit + " → " + donnees.soldeNouveau + " €")
                         break;
 
@@ -335,6 +339,8 @@ var app = new Vue({
             this.api("client/payer", options, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
+                        that.idCarte = ''
+                        that.prix = ''
                         that.transaction(donnees.idTransaction, "Client " + that.idCarte + " débité : " + donnees.soldeAncien + " - " + donnees.montant + " → " + donnees.soldeNouveau + " €")
                         break;
 
@@ -349,6 +355,7 @@ var app = new Vue({
             this.api("client/vidange", {idCarte: this.idCarte}, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
+                        that.idCarte = ''
                         that.transaction(donnees.idTransaction, "Client " + that.idCarte + " vidé : " + donnees.soldeAncien + " → 0 €")
                         break;
 

@@ -253,7 +253,7 @@
                     <h4>Liste des clients</h4>
                     <button @click="actuClients">Rafraîchir</button>
                     <ul class="collapsible popout" data-collapsible="accordion">
-                        <li v-for="client in clients">
+                        <li v-for="client in clients" @click="idCarte = client.idCarte">
                             <div class="collapsible-header">
                                 <i class="material-icons">perm_identity</i> {{ client.idCarte }} : {{ client.solde }} €
                             </div>
