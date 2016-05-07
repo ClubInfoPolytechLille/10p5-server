@@ -90,7 +90,7 @@ var app = new Vue({
         actuTransactions: function() {
             var that = this
             if (this.moi.droit >= 3) {
-                appel = "transaction"
+                appel = "transactions"
                 donnees = {}
             } else {
                 appel = "utilisateur/fiche"
