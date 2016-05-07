@@ -28,9 +28,11 @@ if (donne("login") && donne("mdp")) {
     $requete->bind_result($mdpHash);
     if ($requete->fetch()) {
         if (!password_verify(donne("mdp"), $mdpHash)) {
+            sleep(1);
             retour("identifiants_invalides"); // Mot de passe incorrect
         }
     } else {
+        sleep(1);
         retour("identifiants_invalides"); // Identifiant inconnu
     }
     $requete->close();
@@ -47,6 +49,7 @@ if (donne("login") && donne("mdp")) {
     }
     $requete->bind_result($login);
     if (!$requete->fetch()) {
+        sleep(1);
         retour("carte_inconnue");
     }
     $requete->close();
