@@ -301,9 +301,9 @@ var app = new Vue({
             this.api("client/ajouter", {idCarte: this.idCarte, solde: this.solde, decouvert: this.decouvert}, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
+                        that.transaction(donnees.idTransaction, "Client " + that.idCarte + " crée avec un solde de " + that.solde + " €")
                         that.idCarte = ''
                         that.solde = ''
-                        that.transaction(donnees.idTransaction, "Client " + that.idCarte + " crée avec un solde de " + that.solde + " €")
                         break;
 
                     default:
@@ -317,9 +317,9 @@ var app = new Vue({
             this.api("client/recharger", {idCarte: this.idCarte, montant: this.credit}, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
+                        that.transaction(donnees.idTransaction, "Client " + that.idCarte + " rechargé : " + donnees.soldeAncien + " + " + that.credit + " → " + donnees.soldeNouveau + " €")
                         that.idCarte = ''
                         that.credit = ''
-                        that.transaction(donnees.idTransaction, "Client " + that.idCarte + " rechargé : " + donnees.soldeAncien + " + " + that.credit + " → " + donnees.soldeNouveau + " €")
                         break;
 
                     default:
@@ -339,9 +339,9 @@ var app = new Vue({
             this.api("client/payer", options, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
+                        that.transaction(donnees.idTransaction, "Client " + that.idCarte + " débité : " + donnees.soldeAncien + " - " + donnees.montant + " → " + donnees.soldeNouveau + " €")
                         that.idCarte = ''
                         that.prix = ''
-                        that.transaction(donnees.idTransaction, "Client " + that.idCarte + " débité : " + donnees.soldeAncien + " - " + donnees.montant + " → " + donnees.soldeNouveau + " €")
                         break;
 
                     default:
@@ -355,8 +355,8 @@ var app = new Vue({
             this.api("client/vidange", {idCarte: this.idCarte}, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
-                        that.idCarte = ''
                         that.transaction(donnees.idTransaction, "Client " + that.idCarte + " vidé : " + donnees.soldeAncien + " → 0 €")
+                        that.idCarte = ''
                         break;
 
                     default:
