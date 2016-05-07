@@ -89,7 +89,14 @@ var app = new Vue({
         },
         actuTransactions: function() {
             var that = this
-            this.api("transactions", {}, function(retour, donnees) {
+            if (this.moi.droit >= 3) {
+                appel = "transaction"
+                donnees = {}
+            } else {
+                appel = "utilisateur/fiche"
+                donnees = {login: this.moi.login}
+            }
+            this.api(appel, donnees, function(retour, donnees) {
                 switch(retour) {
                     case "ok":
                         that.transactions = donnees.transactions

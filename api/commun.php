@@ -16,7 +16,7 @@ define("TRANSACTION_RECHARGEMENT", 2);
 define("TRANSACTION_PAIEMENT", 3);
 define("TRANSACTION_VIDANGE", 4);
 
-define("TRANSACTION_DUREE", 60);
+define("TRANSACTION_DUREE", 120);
 
 // Fonctions utiles
 function retour($status, $donnees = array()) { // Renvoie les données passées
